@@ -1,10 +1,10 @@
 {
     "version": 2,
-    "name": "homework",
+    "name": "hw2",
     "builds": [
-       { "src": "src/homework.ts", "use": "@vercel/node" }
+       { "src": "src/main.ts", "use": "@vercel/node" }
     ],
     "routes": [
-       { "src": "/(.*)", "dest": "src/homework.ts" }
+       { "src": "/(.*)", "dest": "src/main.ts" }
     ]
  }
