@@ -69,51 +69,43 @@ blogsRoutes.post('/', (req: Request, res: Response) => {
     return res.status(401).send();
   }
 
+  const errorsMessages = [];
+
   // Проверяем, что все обязательные поля заполнены
   if (!name || !description || !websiteUrl) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Missing required fields', 
-          field: "name or description or websiteUrl"
-        }
-      ]
+    errorsMessages.push({
+      message: 'Missing required fields', 
+      field: "name or description or websiteUrl"
     });
   }
 
   // Проверяем, что поля соответствуют критериям
   if (name.length > 15) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Name is too long', 
-          field: "name"
-        }
-      ]
+    errorsMessages.push({
+      message: 'Name is too long', 
+      field: "name"
     });
   }
 
   if (description.length > 500) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Description is too long', 
-          field: "name"
-        }
-      ]
+    errorsMessages.push({
+      message: 'Description is too long', 
+      field: "description"
     });
   }
 
   const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
 
   if (!websiteUrlRegex.test(websiteUrl)) {
+    errorsMessages.push({
+      message: 'Invalid website URL', 
+      field: "websiteUrl"
+    });
+  }
+
+  if (errorsMessages.length > 0) {
     return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Invalid website URL', 
-          field: "websiteUrl"
-        }
-      ]
+      errorsMessages
     });
   }
 
@@ -164,14 +156,12 @@ blogsRoutes.put('/:id', (req: Request, res: Response) => {
     return res.status(401).send();
   }
   
+  const errorsMessages = [];
+
   if (!websiteUrl || websiteUrl.length > 100) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Invalid website URL', 
-          field: "websiteUrl"
-        }
-      ]
+    errorsMessages.push({
+      message: 'Invalid website URL', 
+      field: "websiteUrl"
     });
   }
 
@@ -179,44 +169,37 @@ blogsRoutes.put('/:id', (req: Request, res: Response) => {
   const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
 
   if (!websiteUrlRegex.test(websiteUrl)) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Invalid website URL', 
-          field: "websiteUrl"
-        }
-      ]
+    errorsMessages.push({
+      message: 'Invalid website URL', 
+      field: "websiteUrl"
     });
   }
   
   if (!name || name.length > 15) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Invalid name', 
-          field: "name"
-        }
-      ]
+    errorsMessages.push({
+      message: 'Invalid name', 
+      field: "name"
     });
   }
 
   if (!description || description.length > 500) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Invalid description', 
-          field: "description"
-        }
-      ]
+    errorsMessages.push({
+      message: 'Invalid description', 
+      field: "description"
     });
   }
 
+  if (errorsMessages.length > 0) {
+    return res.status(400).json({
+      errorsMessages
+    });
+  }
 
   // Обновляем блог по его id
   const updatedBlog = blogs.find(blog => blog.id === id);
 
   if (!updatedBlog) {
-    return res.status(404)
+    return res.status(404).send();
   } else {
     updatedBlog.name = name;
     updatedBlog.description = description;

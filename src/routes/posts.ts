@@ -94,53 +94,64 @@ postsRouter.post('/', (req: Request, res: Response) => {
   }
 
     // Проверяем, что все обязательные поля заполнены
-  if (!title || !shortDescription || !content || !blogId) {
+  const errorsMessages = [];
+  if (!title) {
+    errorsMessages.push({
+      message: 'Missing required field',
+      field: 'title'
+    });
+  }
+  if (!shortDescription) {
+    errorsMessages.push({
+      message: 'Missing required field',
+      field: 'shortDescription'
+    });
+  }
+  if (!content) {
+    errorsMessages.push({
+      message: 'Missing required field',
+      field: 'content'
+    });
+  }
+  if (!blogId) {
+    errorsMessages.push({
+      message: 'Missing required field',
+      field: 'blogId'
+    });
+  }
+  if (errorsMessages.length > 0) {
     return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Missing required fields', 
-          field: "title or shortDescription or content or blogId"
-        }
-      ]
+      errorsMessages
     });
   }
 
   // Проверяем, что поля соответствуют критериям
   if (title.length > 30) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Title is too long', 
-          field: "title"
-        }
-      ]
+    errorsMessages.push({
+      message: 'Title is too long', 
+      field: "title"
     });
   }
   
-
   if (shortDescription.length > 100) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'shortDescription is too long', 
-          field: "shortDescription"
-        }
-      ]
+    errorsMessages.push({
+      message: 'shortDescription is too long', 
+      field: "shortDescription"
     });
   }
   
-
   if (content.length > 1000) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'content is too long', 
-          field: "content"
-        }
-      ]
+    errorsMessages.push({
+      message: 'content is too long', 
+      field: "content"
     });
   }
-  
+
+  if (errorsMessages.length > 0) {
+    return res.status(400).json({
+      errorsMessages
+    });
+  }
 
   const blog = blogs.find((blog) => blog.id === blogId);
 
@@ -188,63 +199,51 @@ postsRouter.put('/:id', (req: Request, res: Response) => {
   const { title, shortDescription, content, blogId } = req.body as Post;
 
   // Validate the input fields
-  if (!title || title.length > 30) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Invalid title', 
-          field: "title"
-        }
-      ]
+  const errorsMessages = [];
+  if (title && title.length > 30) {
+    errorsMessages.push({
+      message: 'Invalid title', 
+      field: "title"
     });
   }
 
-  if (!shortDescription || shortDescription.length > 100) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Invalid shortDescription', 
-          field: "shortDescription"
-        }
-      ]
+  if (shortDescription && shortDescription.length > 100) {
+    errorsMessages.push({
+      message: 'Invalid shortDescription', 
+      field: "shortDescription"
     });
   }
 
-  if (!content || content.length > 1000) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Invalid content', 
-          field: "content"
-        }
-      ]
+  if (content && content.length > 1000) {
+    errorsMessages.push({
+      message: 'Invalid content', 
+      field: "content"
     });
   }
 
-  if (!blogId) {
-    return res.status(400).json({
-      errorsMessages: [
-        {
-          message: 'Blog not found', 
-          field: "blogId"
-        }
-      ]
-    });
+  if (blogId) {
+    const blog = blogs.find((blog) => blog.id === blogId);
+    if (!blog) {
+      errorsMessages.push({
+        message: 'Blog not found', 
+        field: "blogId"
+      });
+    }
   }
 
-  const blog = blogs.find((blog) => blog.id === blogId);
-
-  if (!blog) {
-    return res.status(404).send()
+  if (errorsMessages.length > 0) {
+    return res.status(400).json({
+      errorsMessages
+    });
   }
 
   const updatedPost = {
 
     id: postId,
-    title,
-    shortDescription,
-    content,
-    blogId,
+    title: title || posts[postIndex].title,
+    shortDescription: shortDescription || posts[postIndex].shortDescription,
+    content: content || posts[postIndex].content,
+    blogId: blogId || posts[postIndex].blogId,
     blogName: posts[postIndex].blogName
 
   };
