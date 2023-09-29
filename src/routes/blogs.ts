@@ -73,6 +73,13 @@ blogsRoutes.post('/', (req: Request, res: Response) => {
     });
   }
 
+  if (name.trim().length == 0) {
+    errorsMessages.push({
+      message: 'Invalid name', 
+      field: "name"
+    });
+  }
+
   // Проверяем, что поля соответствуют критериям
   if (name?.length > 15) {
     errorsMessages.push({
