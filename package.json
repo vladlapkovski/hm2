@@ -23,5 +23,6 @@
     "watch": "tsc -w",
     "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
-  "repository": "https://github.com/vladlapkovski/hm1.git"
+  "repository": "https://github.com/vladlapkovski/hm1.git",
+  "author": "vladlapkovski <vlad.lapkofffskii@gmail.com>"
 }

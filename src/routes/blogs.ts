@@ -72,22 +72,36 @@ blogsRoutes.post('/', (req: Request, res: Response) => {
   const errorsMessages = [];
 
   // Проверяем, что все обязательные поля заполнены
-  if (!name || !description || !websiteUrl) {
+  if (!name ) {
     errorsMessages.push({
       message: 'Missing required fields', 
-      field: "name or description or websiteUrl"
+      field: "name"
+    });
+  }
+
+  if (!description) {
+    errorsMessages.push({
+      message: 'Missing required fields', 
+      field: "description"
+    });
+  }
+
+  if (!websiteUrl) {
+    errorsMessages.push({
+      message: 'Missing required fields', 
+      field: "websiteUrl"
     });
   }
 
   // Проверяем, что поля соответствуют критериям
-  if (name.length > 15) {
+  if (name?.length > 15) {
     errorsMessages.push({
       message: 'Name is too long', 
       field: "name"
     });
   }
 
-  if (description.length > 500) {
+  if (description?.length > 500) {
     errorsMessages.push({
       message: 'Description is too long', 
       field: "description"
