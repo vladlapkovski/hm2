@@ -73,6 +73,12 @@ blogsRoutes.post('/', (req: Request, res: Response) => {
     });
   }
 
+  if (errorsMessages.length > 0) {
+    return res.status(400).json({
+      errorsMessages
+    });
+  }
+  
   if (name?.trim()?.length == 0) {
     errorsMessages.push({
       message: 'Invalid name', 
