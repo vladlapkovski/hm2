@@ -14,27 +14,7 @@ interface Blog {
 }
 
 
-export const blogs: Blog[] = [
-
-  {
-
-    id: "1",
-    name: "Blog 1",
-    description: "MUSIC",
-    websiteUrl: "https://www.youtube.com/watch?v=H6tNm72cMA8"
-    
-  },
-
-  {
-
-    id: "2",
-    name: "Blog 2",
-    description: "MUSIC",
-    websiteUrl: "https://www.youtube.com/watch?v=kM8LC3Nj7-s"
-
-  }
-  
-];
+export const blogs: Blog[] = [];
 
 blogsRoutes.delete("/:blogId", (req: Request, res: Response) => {
 
