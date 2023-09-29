@@ -100,6 +100,13 @@ blogsRoutes.post('/', (req: Request, res: Response) => {
       field: "name"
     });
   }
+   
+  if (websiteUrl?.length > 100) {
+    errorsMessages.push({
+      message: 'websiteUrl is too long', 
+      field: "websiteUrl"
+    });
+  }
 
   if (description?.length > 500) {
     errorsMessages.push({
@@ -108,7 +115,8 @@ blogsRoutes.post('/', (req: Request, res: Response) => {
     });
   }
 
-  const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
+  // const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
+  const websiteUrlRegex = new RegExp('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$');
 
   if (!websiteUrlRegex.test(websiteUrl)) {
     errorsMessages.push({
