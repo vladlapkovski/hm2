@@ -52,66 +52,68 @@ blogsRoutes.post('/', (req: Request, res: Response) => {
   const errorsMessages = [];
 
   // Проверяем, что все обязательные поля заполнены
-  if (!name ) {
-    errorsMessages.push({
-      message: 'Missing required fields', 
-      field: "name"
-    });
-  }
-
-  if (!description) {
-    errorsMessages.push({
-      message: 'Missing required fields', 
-      field: "description"
-    });
-  }
-
-  if (!websiteUrl) {
-    errorsMessages.push({
-      message: 'Missing required fields', 
-      field: "websiteUrl"
-    });
-  }
-
-
-  if (name?.trim()?.length == 0) {
+  if (!name || name?.trim()?.length == 0 || name?.length > 15) {
     errorsMessages.push({
       message: 'Invalid name', 
       field: "name"
     });
   }
 
-  // Проверяем, что поля соответствуют критериям
-  if (name?.length > 15) {
+  if (!description || description?.length > 500) {
     errorsMessages.push({
-      message: 'Name is too long', 
-      field: "name"
-    });
-  }
-   
-  if (websiteUrl?.length > 100) {
-    errorsMessages.push({
-      message: 'websiteUrl is too long', 
-      field: "websiteUrl"
-    });
-  }
-
-  if (description?.length > 500) {
-    errorsMessages.push({
-      message: 'Description is too long', 
+      message: 'Invalid description', 
       field: "description"
     });
   }
 
-  // const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
   const websiteUrlRegex = new RegExp('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$');
 
-  if (!websiteUrlRegex.test(websiteUrl)) {
+  if (!websiteUrl || websiteUrl?.length > 100 || !websiteUrlRegex.test(websiteUrl)) {
     errorsMessages.push({
-      message: 'Invalid website URL', 
+      message: 'Invalid websiteUrl', 
       field: "websiteUrl"
     });
   }
+
+
+  // if (name?.trim()?.length == 0) {
+  //   errorsMessages.push({
+  //     message: 'Invalid name', 
+  //     field: "name"
+  //   });
+  // }
+
+  // Проверяем, что поля соответствуют критериям
+  // if (name?.length > 15) {
+  //   errorsMessages.push({
+  //     message: 'Name is too long', 
+  //     field: "name"
+  //   });
+  // }
+   
+  // if (websiteUrl?.length > 100) {
+  //   errorsMessages.push({
+  //     message: 'websiteUrl is too long', 
+  //     field: "websiteUrl"
+  //   });
+  // }
+
+  // if (description?.length > 500) {
+  //   errorsMessages.push({
+  //     message: 'Description is too long', 
+  //     field: "description"
+  //   });
+  // }
+
+  // const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
+  // const websiteUrlRegex = new RegExp('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$');
+
+  // if (!websiteUrlRegex.test(websiteUrl)) {
+  //   errorsMessages.push({
+  //     message: 'Invalid website URL', 
+  //     field: "websiteUrl"
+  //   });
+  // }
 
   if (errorsMessages.length > 0) {
     return res.status(400).json({
