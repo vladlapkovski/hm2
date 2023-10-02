@@ -170,7 +170,9 @@ blogsRoutes.put('/:id', (req: Request, res: Response) => {
   
   const errorsMessages = [];
 
-  if (!websiteUrl || websiteUrl.length > 100) {
+  const websiteUrlRegex = new RegExp('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$');
+
+  if (!websiteUrl || websiteUrl?.length > 100 || !websiteUrlRegex.test(websiteUrl)) {
     errorsMessages.push({
       message: 'Invalid website URL', 
       field: "websiteUrl"
@@ -178,23 +180,23 @@ blogsRoutes.put('/:id', (req: Request, res: Response) => {
   }
 
   // Проверяем корректность ссылки на сайт
-  const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
+  // const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
 
-  if (!websiteUrlRegex.test(websiteUrl)) {
-    errorsMessages.push({
-      message: 'Invalid website URL', 
-      field: "websiteUrl"
-    });
-  }
+  // if (!websiteUrlRegex.test(websiteUrl)) {
+  //   errorsMessages.push({
+  //     message: 'Invalid website URL', 
+  //     field: "websiteUrl"
+  //   });
+  // }
   
-  if (!name || name.length > 15) {
+  if (!name || name?.trim()?.length == 0 || name?.length > 15) {
     errorsMessages.push({
       message: 'Invalid name', 
       field: "name"
     });
   }
 
-  if (!description || description.length > 500) {
+  if (!description || description?.length > 500) {
     errorsMessages.push({
       message: 'Invalid description', 
       field: "description"
