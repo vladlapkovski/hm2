@@ -65,15 +65,15 @@ postsRouter.delete('/:id', (req: Request, res: Response) => {
   const postId = req.params.id;
 
   const postIndex = posts.findIndex((post) => post.id === postId);
-
-  if (postIndex === -1) {
-    return res.status(404)
-  }
-
+  
   const authHeader = req.headers.authorization;
 
   if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
     return res.status(401).send();
+  }
+
+  if (postIndex === -1) {
+    return res.status(404)
   }
   
   posts.splice(postIndex, 1);
