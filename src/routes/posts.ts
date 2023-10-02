@@ -128,36 +128,6 @@ postsRouter.post('/', (req: Request, res: Response) => {
     });
   }
 
-  // Проверяем, что поля соответствуют критериям
-  // if (title.length > 30) {
-  //   errorsMessages.push({
-  //     message: 'Title is too long', 
-  //     field: "title"
-  //   });
-  // }
-  
-  // if (shortDescription.length > 100) {
-  //   errorsMessages.push({
-  //     message: 'shortDescription is too long', 
-  //     field: "shortDescription"
-  //   });
-  // }
-  
-  // if (content.length > 1000) {
-  //   errorsMessages.push({
-  //     message: 'content is too long', 
-  //     field: "content"
-  //   });
-  // }
-
-  // if (errorsMessages.length > 0) {
-  //   return res.status(400).json({
-  //     errorsMessages
-  //   });
-  // }
-
-  // const blog = blogs.find((blog) => blog.id === blogId);
-
   if (!blog) {
     return res.status(404).send()
   }  
@@ -202,21 +172,21 @@ postsRouter.put('/:id', (req: Request, res: Response) => {
 
   // Validate the input fields
   const errorsMessages = [];
-  if (title && title.length > 30) {
+  if (!title || title?.trim()?.length == 0 || title?.length > 30) {
     errorsMessages.push({
       message: 'Invalid title', 
       field: "title"
     });
   }
 
-  if (shortDescription && shortDescription.length > 100) {
+  if (!shortDescription || shortDescription?.length > 100) {
     errorsMessages.push({
       message: 'Invalid shortDescription', 
       field: "shortDescription"
     });
   }
 
-  if (content && content.length > 1000) {
+  if (!content || content?.trim()?.length == 0 || content?.length > 1000) {
     errorsMessages.push({
       message: 'Invalid content', 
       field: "content"

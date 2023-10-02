@@ -76,45 +76,6 @@ blogsRoutes.post('/', (req: Request, res: Response) => {
   }
 
 
-  // if (name?.trim()?.length == 0) {
-  //   errorsMessages.push({
-  //     message: 'Invalid name', 
-  //     field: "name"
-  //   });
-  // }
-
-  // Проверяем, что поля соответствуют критериям
-  // if (name?.length > 15) {
-  //   errorsMessages.push({
-  //     message: 'Name is too long', 
-  //     field: "name"
-  //   });
-  // }
-   
-  // if (websiteUrl?.length > 100) {
-  //   errorsMessages.push({
-  //     message: 'websiteUrl is too long', 
-  //     field: "websiteUrl"
-  //   });
-  // }
-
-  // if (description?.length > 500) {
-  //   errorsMessages.push({
-  //     message: 'Description is too long', 
-  //     field: "description"
-  //   });
-  // }
-
-  // const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
-  // const websiteUrlRegex = new RegExp('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$');
-
-  // if (!websiteUrlRegex.test(websiteUrl)) {
-  //   errorsMessages.push({
-  //     message: 'Invalid website URL', 
-  //     field: "websiteUrl"
-  //   });
-  // }
-
   if (errorsMessages.length > 0) {
     return res.status(400).json({
       errorsMessages
@@ -178,16 +139,6 @@ blogsRoutes.put('/:id', (req: Request, res: Response) => {
       field: "websiteUrl"
     });
   }
-
-  // Проверяем корректность ссылки на сайт
-  // const websiteUrlRegex = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
-
-  // if (!websiteUrlRegex.test(websiteUrl)) {
-  //   errorsMessages.push({
-  //     message: 'Invalid website URL', 
-  //     field: "websiteUrl"
-  //   });
-  // }
   
   if (!name || name?.trim()?.length == 0 || name?.length > 15) {
     errorsMessages.push({
