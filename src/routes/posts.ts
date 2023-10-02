@@ -97,9 +97,6 @@ postsRouter.post('/', (req: Request, res: Response) => {
   const errorsMessages = [];
 
   const blog = blogs.find((blog) => blog.id === blogId);
-  if (!blog) {
-    return res.status(404).send()
-  }
 
   if (!title || title?.trim()?.length == 0 || title?.length > 30) {
     errorsMessages.push({
@@ -161,10 +158,9 @@ postsRouter.post('/', (req: Request, res: Response) => {
 
   // const blog = blogs.find((blog) => blog.id === blogId);
 
-  // if (!blog) {
-  //   return res.status(404).send()
-  // }
-    
+  if (!blog) {
+    return res.status(404).send()
+  }  
 
   // Создаем новый пост
   const newPost: Post = { 
