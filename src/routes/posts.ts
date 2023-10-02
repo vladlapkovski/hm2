@@ -95,21 +95,21 @@ postsRouter.post('/', (req: Request, res: Response) => {
 
     // Проверяем, что все обязательные поля заполнены
   const errorsMessages = [];
-  if (!title) {
+  if (!title || title?.trim()?.length == 0 || title?.length > 30) {
     errorsMessages.push({
-      message: 'Missing required field',
+      message: 'Invalid title',
       field: 'title'
     });
   }
-  if (!shortDescription) {
+  if (!shortDescription || shortDescription?.length > 100) {
     errorsMessages.push({
-      message: 'Missing required field',
+      message: 'Invalid shortDescription',
       field: 'shortDescription'
     });
   }
-  if (!content) {
+  if (!content || content?.length > 1000) {
     errorsMessages.push({
-      message: 'Missing required field',
+      message: 'Invalid content',
       field: 'content'
     });
   }
@@ -126,32 +126,32 @@ postsRouter.post('/', (req: Request, res: Response) => {
   }
 
   // Проверяем, что поля соответствуют критериям
-  if (title.length > 30) {
-    errorsMessages.push({
-      message: 'Title is too long', 
-      field: "title"
-    });
-  }
+  // if (title.length > 30) {
+  //   errorsMessages.push({
+  //     message: 'Title is too long', 
+  //     field: "title"
+  //   });
+  // }
   
-  if (shortDescription.length > 100) {
-    errorsMessages.push({
-      message: 'shortDescription is too long', 
-      field: "shortDescription"
-    });
-  }
+  // if (shortDescription.length > 100) {
+  //   errorsMessages.push({
+  //     message: 'shortDescription is too long', 
+  //     field: "shortDescription"
+  //   });
+  // }
   
-  if (content.length > 1000) {
-    errorsMessages.push({
-      message: 'content is too long', 
-      field: "content"
-    });
-  }
+  // if (content.length > 1000) {
+  //   errorsMessages.push({
+  //     message: 'content is too long', 
+  //     field: "content"
+  //   });
+  // }
 
-  if (errorsMessages.length > 0) {
-    return res.status(400).json({
-      errorsMessages
-    });
-  }
+  // if (errorsMessages.length > 0) {
+  //   return res.status(400).json({
+  //     errorsMessages
+  //   });
+  // }
 
   const blog = blogs.find((blog) => blog.id === blogId);
 
