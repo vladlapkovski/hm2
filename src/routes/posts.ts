@@ -95,6 +95,12 @@ postsRouter.post('/', (req: Request, res: Response) => {
 
     // Проверяем, что все обязательные поля заполнены
   const errorsMessages = [];
+
+  const blog = blogs.find((blog) => blog.id === blogId);
+  if (!blog) {
+    return res.status(404).send()
+  }
+
   if (!title || title?.trim()?.length == 0 || title?.length > 30) {
     errorsMessages.push({
       message: 'Invalid title',
@@ -113,7 +119,7 @@ postsRouter.post('/', (req: Request, res: Response) => {
       field: 'content'
     });
   }
-  if (!blogId) {
+  if (!blogId || !blog) {
     errorsMessages.push({
       message: 'Missing required field',
       field: 'blogId'
@@ -153,11 +159,11 @@ postsRouter.post('/', (req: Request, res: Response) => {
   //   });
   // }
 
-  const blog = blogs.find((blog) => blog.id === blogId);
+  // const blog = blogs.find((blog) => blog.id === blogId);
 
-  if (!blog) {
-    return res.status(404).send()
-  }
+  // if (!blog) {
+  //   return res.status(404).send()
+  // }
     
 
   // Создаем новый пост
