@@ -217,7 +217,7 @@ blogsRoutes.put('/:id', (req: Request, res: Response) => {
     updatedBlog.description = description;
     updatedBlog.websiteUrl = websiteUrl;
 
-    return res.send(updatedBlog);
+    return res.status(204).send(updatedBlog);
   }
 
 });
