@@ -110,7 +110,7 @@ postsRouter.post('/', (req: Request, res: Response) => {
       field: 'shortDescription'
     });
   }
-  if (!content || content?.length > 1000) {
+  if (!content || content?.trim()?.length == 0 || content?.length > 1000) {
     errorsMessages.push({
       message: 'Invalid content',
       field: 'content'
