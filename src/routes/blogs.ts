@@ -16,13 +16,13 @@ interface Blog {
 
 export const blogs: Blog[] = [];
 
-blogsRoutes.delete("/:blogId", (req: Request, res: Response) => {
+blogsRoutes.delete("/:blogId", async (req: Request, res: Response) => {
 
-  const blogId = req.params.blogId;
+  const blogId = await req.params.blogId;
   
-  const index = blogs.findIndex(blog => blog.id === blogId);
+  const index = await blogs.findIndex(blog => blog.id === blogId);
   
-  const authHeader = req.headers.authorization;
+  const authHeader = await req.headers.authorization;
 
   if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
     return res.status(401).send();
@@ -39,11 +39,11 @@ blogsRoutes.delete("/:blogId", (req: Request, res: Response) => {
   
   
   
-blogsRoutes.post('/', (req: Request, res: Response) => {
+blogsRoutes.post('/', async (req: Request, res: Response) => {
     
-  const { name, description, websiteUrl } = req.body as Blog;
+  const { name, description, websiteUrl } = await req.body as Blog;
 
-  const authHeader = req.headers.authorization;
+  const authHeader = await req.headers.authorization;
 
   if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
     return res.status(401).send();
@@ -83,7 +83,7 @@ blogsRoutes.post('/', (req: Request, res: Response) => {
   }
 
   // Создаем новый блог
-  const newBlog: Blog = { id: String(blogs.length + 1), name, description, websiteUrl };
+  const newBlog: Blog = await { id: String(blogs.length + 1), name, description, websiteUrl };
 
   blogs.push(newBlog); // добавляем новый блог в массив
 
@@ -101,11 +101,11 @@ blogsRoutes.get('/', (req: Request, res: Response) => {
 });
   
   
-blogsRoutes.get('/:id', (req: Request, res: Response) => {
+blogsRoutes.get('/:id', async (req: Request, res: Response) => {
 
-  const id = req.params.id;
+  const id = await req.params.id;
 
-  const blog = blogs.find((blog) => blog.id === id);
+  const blog = await blogs.find((blog) => blog.id === id);
 
   if (blog) {
     res.status(200).send(blog); 
@@ -117,13 +117,13 @@ blogsRoutes.get('/:id', (req: Request, res: Response) => {
   
   
   
-blogsRoutes.put('/:id', (req: Request, res: Response) => {
+blogsRoutes.put('/:id', async (req: Request, res: Response) => {
 
-  const id = req.params.id;
+  const id = await req.params.id;
 
-  const { name, description, websiteUrl } = req.body;
+  const { name, description, websiteUrl } = await req.body;
 
-  const authHeader = req.headers.authorization;
+  const authHeader = await req.headers.authorization;
 
   if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
     return res.status(401).send();
@@ -161,7 +161,7 @@ blogsRoutes.put('/:id', (req: Request, res: Response) => {
   }
 
   // Обновляем блог по его id
-  const updatedBlog = blogs.find(blog => blog.id === id);
+  const updatedBlog = await blogs.find(blog => blog.id === id);
 
   if (!updatedBlog) {
     return res.status(404).send();

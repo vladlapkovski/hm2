@@ -47,11 +47,11 @@ postsRouter.get('/', (req: Request, res: Response) => {
   res.status(200).send(posts); // возвращаем массив всех блогов
 });
 
-postsRouter.get('/:id', (req: Request, res: Response) => {
+postsRouter.get('/:id', async (req: Request, res: Response) => {
 
-  const id = req.params.id;
+  const id = await req.params.id;
 
-  const post = posts.find((post) => post.id === id); 
+  const post = await posts.find((post) => post.id === id); 
 
   if (post) {
     res.status(200).send(post); 
@@ -60,13 +60,13 @@ postsRouter.get('/:id', (req: Request, res: Response) => {
   }
 });
 
-postsRouter.delete('/:id', (req: Request, res: Response) => {
+postsRouter.delete('/:id', async (req: Request, res: Response) => {
 
-  const postId = req.params.id;
+  const postId = await req.params.id;
 
-  const postIndex = posts.findIndex((post) => post.id === postId);
+  const postIndex = await posts.findIndex((post) => post.id === postId);
 
-  const authHeader = req.headers.authorization;
+  const authHeader = await req.headers.authorization;
 
   if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
     return res.status(401).send();
@@ -83,11 +83,11 @@ postsRouter.delete('/:id', (req: Request, res: Response) => {
 });
 
 
-postsRouter.post('/', (req: Request, res: Response) => {
+postsRouter.post('/', async (req: Request, res: Response) => {
   
-  const { title, shortDescription, content, blogId } = req.body as Post;
+  const { title, shortDescription, content, blogId } = await req.body as Post;
  
-  const authHeader = req.headers.authorization;
+  const authHeader = await req.headers.authorization;
 
   if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
     return res.status(401).send();
@@ -152,23 +152,23 @@ postsRouter.post('/', (req: Request, res: Response) => {
 });
 
 
-postsRouter.put('/:id', (req: Request, res: Response) => {
+postsRouter.put('/:id', async (req: Request, res: Response) => {
 
-  const postId = req.params.id;
+  const postId = await req.params.id;
 
-  const postIndex = posts.findIndex((post) => post.id === postId);
+  const postIndex = await posts.findIndex((post) => post.id === postId);
 
   if (postIndex === -1) {
     return res.status(404).send()
   }
 
-  const authHeader = req.headers.authorization;
+  const authHeader = await req.headers.authorization;
 
   if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
     return res.status(401).send();
   }
 
-  const { title, shortDescription, content, blogId } = req.body as Post;
+  const { title, shortDescription, content, blogId } = await req.body as Post;
 
   // Validate the input fields
   const errorsMessages = [];
