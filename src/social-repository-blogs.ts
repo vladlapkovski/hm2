@@ -14,7 +14,7 @@ export const socialRepository = {
             description, 
             websiteUrl,
             createdAt: new Date().toISOString(),
-            isMembership: true,
+            isMembership: false,
             id: new ObjectId()
         })
         return {
