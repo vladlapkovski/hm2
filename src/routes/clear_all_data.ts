@@ -1,12 +1,12 @@
 import express, {Request, Response, Router} from "express"
-import { posts } from "./posts";
-import { blogs } from "./blogs";
+import { collection, collection1, collectionPostsType, collectionBlogsType } from '../db'
+import { ObjectId } from "mongodb";
 
 export const dataRouter = Router()
 
 
-dataRouter.delete("/", (req: Request, res: Response) => {
-    blogs.length = 0;
-    posts.length = 0;
+dataRouter.delete("/", async (req: Request, res: Response) => {
+    await collection.deleteMany({ _id: ObjectId });
+    await collection1.deleteMany({ _id: ObjectId });
     return res.status(204).send();
 });

@@ -1,0 +1,13 @@
+import { collection, collection1, collectionPostsType, collectionBlogsType } from './db'
+
+export const deleteAllPostData = {
+    async deletePost(): Promise<void | collectionPostsType[]> {
+      return collection1.find({}).toArray();
+    }
+}
+
+export const deleteAllBlogData = {
+    async deleteBlog(): Promise<void | collectionBlogsType[]> {
+      return collection.find({}).toArray();
+    }
+}

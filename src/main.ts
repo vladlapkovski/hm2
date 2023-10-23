@@ -1,12 +1,16 @@
-import {appStart } from "./app"
-import dotenv from 'dotenv'
+import { appStart } from "./app";
+import dotenv from "dotenv";
+import { runDb } from "./db";
 
-dotenv.config()
+dotenv.config();
+const app = appStart();
+const port = process.env.PORT || 3000;
 
-// const mongoURI = process.env.MONGO_URL || 'mongodb://0.0.0.0:27017'
-const app = appStart()
-const port = process.env.MONGO_URL || 'mongodb://0.0.0.0:27017'
+const startOFapp = async () => {
+  await runDb();
+  app.listen(port, () => {
+    console.log(`Приложение прослушивает порт: ${port}`);
+  });
+};
 
-app.listen(port, () => {
-    console.log(process.env.MONGO_URL)
-})
+startOFapp();
