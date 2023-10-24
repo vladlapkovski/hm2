@@ -39,9 +39,11 @@ const result = await collection1.insertOne({
   content,
   blogId,
   blogName: BLOGNAME,
-  createdAt: new Date().toISOString()
+  createdAt: new Date().toISOString(),
+  id: new ObjectId()
 });
 return {
+  id: result.insertedId,
   title: title, 
   shortDescription: shortDescription,
   content: content,
@@ -102,6 +104,7 @@ export const updateIDPost = {
       if (result1) {
         const updatedPost = result1 as collectionPostsType;
         return {
+          id: updatedPost.id.toString(),
           title: updatedPost.title,
           shortDescription: updatedPost.shortDescription,
           content: updatedPost.content,

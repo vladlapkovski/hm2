@@ -15,8 +15,10 @@ export const socialRepository = {
             websiteUrl,
             createdAt: new Date().toISOString(),
             isMembership: false,
+            id: new ObjectId()
         })
         return {
+            id: result.insertedId,
             name: name,
             description: description,
             websiteUrl: websiteUrl,
@@ -56,6 +58,7 @@ export const updateIDBlog = {
       if (result) {
         const updatedBlog = result as collectionBlogsType;
         return {
+          id: updatedBlog.id.toString(),
           name: updatedBlog.name,
           description: updatedBlog.description,
           websiteUrl: updatedBlog.websiteUrl
