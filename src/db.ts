@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export type collectionBlogsType = {
-  id: ObjectId;
   name: string;
   description: string;
   websiteUrl: string;
@@ -13,7 +12,6 @@ export type collectionBlogsType = {
 }
 
 export type collectionPostsType = {
-  id: ObjectId;
   title: string;
   shortDescription: string;
   content: string;
