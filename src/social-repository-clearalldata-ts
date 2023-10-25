@@ -6,8 +6,6 @@ export const deleteAllPostData = {
     }
 }
 
-
-
 export const deleteAllBlogData = {
     async deleteBlog(): Promise<void | collectionBlogsType[]> {
       return collection.find({}).toArray();

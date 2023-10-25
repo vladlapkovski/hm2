@@ -25,7 +25,7 @@ export type collectionPostsType = {
 const URL = process.env.MONGO_URL;
 console.log("url:", URL);
 if (!URL) {
-    throw Error("URL not found");
+  throw Error("URL not found");
 }
 const client = new MongoClient(URL);
 
@@ -34,11 +34,11 @@ export const collection = client.db().collection<collectionBlogsType>("social");
 export const collection1 = client.db().collection<collectionPostsType>("Postsocial");
 
 export const runDb = async () => {
-    try {
-        await client.connect();
-        console.log("connected successfully");
-    } catch (e) {
-        console.log("No connection");
-        await client.close();
-    }
+  try {
+    await client.connect();
+    console.log("connected successfully");
+  } catch (e) {
+    console.log("No connection");
+    await client.close();
+  }
 };
