@@ -157,7 +157,7 @@ blogsRoutes.put('/:id', async (req: Request, res: Response) => {
   if (!updatedBlog) {
     return res.status(404).send();
   } else {
-    return res.status(204).send(updatedBlog);
+    return res.status(204).send();
   }
 });
     
