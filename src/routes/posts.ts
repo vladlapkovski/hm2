@@ -19,10 +19,11 @@ postsRouter.get('/:id', async (req: Request, res: Response) => {
 
   const id = new ObjectId(req.params.id);
 
-  const post = await collection1.findOne({ _id: id }); 
+  const post = await collection1.findOne({ $or: [{ _id: id }, { id }] }); 
 
   if (post) {
-    res.status(200).send(post); 
+    const { _id, ...rest } = post;
+    res.status(200).send(rest); 
   } else {
     res.sendStatus(404);
   }
