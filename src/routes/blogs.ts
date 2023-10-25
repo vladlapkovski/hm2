@@ -1,5 +1,5 @@
 import express, {Request, Response, Router} from "express"
-import { socialRepository } from "../social-repository-blogs";
+import { getIDBlog, socialRepository } from "../social-repository-blogs";
 import { collection, collectionBlogsType } from '../db';
 export const blogsRoutes = Router({}) 
 import { ObjectId } from 'mongodb';
@@ -97,10 +97,11 @@ blogsRoutes.get('/', async (req: Request, res: Response) => {
 blogsRoutes.get('/:id', async (req: Request, res: Response) => {
   const id = new ObjectId(req.params.id);
 
-  const blog = await collection.findOne({ _id: id });
+  const blog = await collection.findOne({ $or: [{ _id: id }, { id }] });
 
   if (blog) {
-    res.status(200).send(blog);
+    const { _id, ...rest } = blog;
+    res.status(200).send(rest);
   } else {
     res.sendStatus(404);
   }

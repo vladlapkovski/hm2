@@ -1,9 +1,14 @@
 import { collection, collectionBlogsType } from './db'
 import { ObjectId } from 'mongodb';
 
-export const socialRepository = {
-    async getBlogs(): Promise<collectionBlogsType[]> {
-        return collection.find({}).toArray()
+    export const socialRepository = {
+      async getBlogs(): Promise<collectionBlogsType[]> {
+        const foundBlogs = await collection.find({}).toArray();
+        const blogs = foundBlogs.map((blog) => {
+          const { _id, ...rest } = blog; 
+          return rest;
+        });
+        return blogs;
     },
     async createBlog(name: string, description: string, websiteUrl: string, createdAt: string, isMembership: boolean): Promise<collectionBlogsType | undefined> {
         if (!name.trim() || !description.trim() || !websiteUrl.trim()) {
@@ -15,7 +20,7 @@ export const socialRepository = {
             websiteUrl,
             createdAt: new Date().toISOString(),
             isMembership: false,
-            id: new ObjectId()
+            id: new ObjectId()//_id.toString()
         })
         return {
             id: result.insertedId,
@@ -29,10 +34,15 @@ export const socialRepository = {
 }
 
 export const getIDBlog = {
-    async getBlog(): Promise<collectionBlogsType[]> {
-      return collection.find({}).toArray();
-    }
-}
+  async getBlog(): Promise<collectionBlogsType[]> {
+    const foundBlogs = await collection.find({}).toArray();
+    const blogs = foundBlogs.map((blog) => {
+      const { _id, ...rest } = blog;
+      return rest;
+    });
+    return blogs;
+  }
+};
 
 
 export const deleteIDBlog = {
