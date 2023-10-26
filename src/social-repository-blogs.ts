@@ -15,12 +15,12 @@ export const socialRepository = {
     if (!name.trim() || !description.trim() || !websiteUrl.trim()) {
       return undefined;
     }
-
+    const createdAt1 = new Date().toISOString();
     const result = await collection.insertOne({
       name,
       description,
       websiteUrl,
-      createdAt: new Date().toISOString(),
+      createdAt: createdAt1,
       isMembership: true,
       id: new ObjectId()
     });
@@ -30,7 +30,7 @@ export const socialRepository = {
       name,
       description,
       websiteUrl,
-      createdAt: new Date().toISOString(),
+      createdAt: createdAt1,
       isMembership
     };
   }
