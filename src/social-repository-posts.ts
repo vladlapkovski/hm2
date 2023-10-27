@@ -35,14 +35,17 @@ export const socialRepository = {
     }
 
     const BLOGNAME = blog.name;
+    const createdAt2 = new Date().toISOString();
+    const objectId1 = new ObjectId();
     const result = await collection1.insertOne({
       title,
       shortDescription,
       content,
       blogId,
       blogName: BLOGNAME,
-      createdAt: new Date().toISOString(),
-      id: new ObjectId()
+      createdAt: createdAt2,
+      _id: objectId1,
+      id: objectId1
     });
 
     return {
@@ -52,7 +55,7 @@ export const socialRepository = {
       content,
       blogId,
       blogName: BLOGNAME,
-      createdAt: new Date().toISOString()
+      createdAt: createdAt2
     };
   }
 };
