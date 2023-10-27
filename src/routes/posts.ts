@@ -75,6 +75,12 @@ postsRouter.post('/', async (req: Request, res: Response) => {
         field: 'blogId'
       });
     }
+  if (!blog) {
+    errorsMessages.push({
+      message: 'invalid blogId',
+      field: 'blogId'
+    });
+  }
   
   if (!title || title?.trim()?.length == 0 || title?.length > 30) {
     errorsMessages.push({
