@@ -16,13 +16,15 @@ export const socialRepository = {
       return undefined;
     }
     const createdAt1 = new Date().toISOString();
+    const objectId = new ObjectId();
     const result = await collection.insertOne({
       name,
       description,
       websiteUrl,
       createdAt: createdAt1,
       isMembership: false,
-      id: new ObjectId()
+      _id: objectId,
+      id: objectId
     });
 
     return {
