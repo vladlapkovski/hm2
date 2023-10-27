@@ -65,14 +65,7 @@ postsRouter.post('/', async (req: Request, res: Response) => {
   const errorsMessages = [];
 
   const isValidObjectId = ObjectId.isValid(blogId);
-  if (!isValidObjectId) {
-   errorsMessages.push({
-      message: 'Invalid blogId',
-      field: 'blogId'
-    });
-  }
-
-    
+  
   if (!title || title?.trim()?.length == 0 || title?.length > 30) {
     errorsMessages.push({
       message: 'Invalid title',
@@ -91,7 +84,7 @@ postsRouter.post('/', async (req: Request, res: Response) => {
       field: 'content'
     });
   }
-   if (!blogId) {
+   if (!blogId || !isValidObjectId) {
     errorsMessages.push({
       message: 'Missing required field',
       field: 'blogId'
