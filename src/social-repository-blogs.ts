@@ -21,7 +21,7 @@ export const socialRepository = {
       description,
       websiteUrl,
       createdAt: createdAt1,
-      isMembership: true,
+      isMembership: false,
       id: new ObjectId()
     });
 
