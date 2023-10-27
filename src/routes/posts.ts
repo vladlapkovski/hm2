@@ -65,6 +65,16 @@ postsRouter.post('/', async (req: Request, res: Response) => {
   const errorsMessages = [];
 
   const isValidObjectId = ObjectId.isValid(blogId);
+
+  let blog;
+    try {
+      blog = await collection.findOne({ _id: new ObjectId(blogId) });
+    } catch (error) {
+      errorsMessages.push({
+        message: 'invalid blogId',
+        field: 'blogId'
+      });
+    }
   
   if (!title || title?.trim()?.length == 0 || title?.length > 30) {
     errorsMessages.push({
