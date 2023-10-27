@@ -4,6 +4,7 @@ import { collection, collectionPostsType, collection1 } from "../db";
 import { Collection, ObjectId } from 'mongodb';
 
 
+
 export const postsRouter = Router()
 
 const auth = "admin:qwerty";
@@ -63,15 +64,27 @@ postsRouter.post('/', async (req: Request, res: Response) => {
 
     // Проверяем, что все обязательные поля заполнены
   const errorsMessages = [];
+  const nouseerrors = [];
 
-  const isValidObjectId = ObjectId.isValid(blogId);
+  let blog;
+    try {
+      blog = await collection.findOne({ _id: new ObjectId(blogId) });
+    } catch (error) {
+      nouseerrors.push({
+        message: 'Invalid blogId',
+        field: 'blogId'
+      });
+    }
 
-  if (!blogId) {
-    errorsMessages.push({
-      message: 'Invalid blogId',
-      field: 'blogId'
-    });
-  }
+    if (typeof blog !== "object" || !blog) {
+      errorsMessages.push({
+        message: 'Invalid blogId',
+        field: 'blogId'
+      });
+    }
+
+
+  
   
   if (!title || title?.trim()?.length == 0 || title?.length > 30) {
     errorsMessages.push({
@@ -91,12 +104,7 @@ postsRouter.post('/', async (req: Request, res: Response) => {
       field: 'content'
     });
   }
-   if (!isValidObjectId) {
-    errorsMessages.push({
-      message: 'Missing required field',
-      field: 'blogId'
-    });
-  }
+   
   if (errorsMessages.length > 0) {
     return res.status(400).json({
       errorsMessages
@@ -124,20 +132,24 @@ postsRouter.put('/:id', async (req: Request, res: Response) => {
   }
 
   const errorsMessages = [];
+  const nouseerrors = [];
 
-  const isValidObjectId = ObjectId.isValid(blogId);
-  if (!isValidObjectId) {
-    errorsMessages.push({
-      message: 'Invalid blogId',
-      field: 'blogId'
-    });
-  }
-  if (!blogId) {
-    errorsMessages.push({
-      message: 'Invalid blogId',
-      field: 'blogId'
-    });
-  }
+  let blog;
+    try {
+      blog = await collection.findOne({ _id: new ObjectId(blogId) });
+    } catch (error) {
+      nouseerrors.push({
+        message: 'Invalid blogId',
+        field: 'blogId'
+      });
+    }
+
+    if (typeof blog !== "object" || !blog) {
+      errorsMessages.push({
+        message: 'Invalid blogId',
+        field: 'blogId'
+      });
+    }
 
   if (!title || title?.trim()?.length == 0 || title?.length > 30) {
     errorsMessages.push({

@@ -1,6 +1,7 @@
 import { collection, collection1, collectionPostsType } from './db';
 import { ObjectId } from 'mongodb';
 
+
 export const socialRepository = {
   async getPosts(): Promise<collectionPostsType[]> {
     const foundPosts = await collection1.find({}).toArray();
@@ -22,7 +23,7 @@ export const socialRepository = {
     if (!title.trim() || !shortDescription.trim() || !content.trim() || !blogId.trim()) {
       return undefined;
     }
-
+    
     let blog;
     try {
       blog = await collection.findOne({ _id: new ObjectId(blogId) });
