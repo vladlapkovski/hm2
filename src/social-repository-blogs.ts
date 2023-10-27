@@ -31,7 +31,7 @@ export const socialRepository = {
       description,
       websiteUrl,
       createdAt: createdAt1,
-      isMembership
+      isMembership: false
     };
   }
 };
