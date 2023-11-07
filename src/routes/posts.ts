@@ -64,13 +64,13 @@ postsRouter.post('/', async (req: Request, res: Response) => {
 
     // Проверяем, что все обязательные поля заполнены
   const errorsMessages = [];
-  const nouseerrors = [];
+  const noUseErrors = [];
 
   let blog;
     try {
       blog = await collection.findOne({ _id: new ObjectId(blogId) });
     } catch (error) {
-      nouseerrors.push({
+      noUseErrors.push({
         message: 'Invalid blogId',
         field: 'blogId'
       });

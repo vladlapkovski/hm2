@@ -1,6 +1,6 @@
 import express, {Request, Response, Router} from "express"
-import { getIDBlog, socialRepository } from "../social-repository-blogs";
-import { collection, collectionBlogsType } from '../db';
+import { getIDBlog, socialRepository, socialRepository1 } from "../social-repository-blogs";
+import { collection, collectionBlogsType, collectionPostsType } from '../db';
 export const blogsRoutes = Router({}) 
 import { ObjectId } from 'mongodb';
 import { updateIDBlog } from "../social-repository-blogs"
@@ -161,3 +161,74 @@ blogsRoutes.put('/:id', async (req: Request, res: Response) => {
   }
 });
     
+
+
+
+blogsRoutes.post('/:blogId/posts', async (req: Request, res: Response) => {
+    
+  const { title, shortDescription, content, blogId, blogName, createdAt } = req.body as collectionPostsType;
+ 
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
+    return res.status(401).send();
+  }
+
+    // Проверяем, что все обязательные поля заполнены
+  const errorsMessages = [];
+  const noUseErrors = [];
+
+  let blog;
+    try {
+      blog = await collection.findOne({ _id: new ObjectId(blogId) });
+    } catch (error) {
+      noUseErrors.push({
+        message: 'Invalid blogId',
+        field: 'blogId'
+      });
+    }
+
+    if (typeof blog !== "object" || !blog) {
+      errorsMessages.push({
+        message: 'Invalid blogId',
+        field: 'blogId'
+      });
+    }
+
+
+  
+  
+  if (!title || title?.trim()?.length == 0 || title?.length > 30) {
+    errorsMessages.push({
+      message: 'Invalid title',
+      field: 'title'
+    });
+  }
+  if (!shortDescription || shortDescription?.length > 100) {
+    errorsMessages.push({
+      message: 'Invalid shortDescription',
+      field: 'shortDescription'
+    });
+  }
+  if (!content || content?.trim()?.length == 0 || content?.length > 1000) {
+    errorsMessages.push({
+      message: 'Invalid content',
+      field: 'content'
+    });
+  }
+   
+  if (errorsMessages.length > 0) {
+    return res.status(400).json({
+      errorsMessages
+    });
+  } 
+
+  
+
+  // Создаем новый пост
+  const newPost = await socialRepository1.createPost1(title, shortDescription, content, blogId, blogName, createdAt);
+
+  // Возвращаем созданный пост с кодом 201
+  return res.status(201).json(newPost);
+
+});
