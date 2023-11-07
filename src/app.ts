@@ -9,8 +9,8 @@ const app = express();
 const parserMiddleware = express.json()
 
 app.use(parserMiddleware)
-app.use("/hometask_03/api/blogs", blogsRoutes)
-app.use("/hometask_03/api/posts", postsRouter)
-app.use("/hometask_03/api/testing/all-data", dataRouter)
+app.use("/hometask_04/api/blogs", blogsRoutes)
+app.use("/hometask_04/api/posts", postsRouter)
+app.use("/hometask_04/api/testing/all-data", dataRouter)
 return app;
 }
