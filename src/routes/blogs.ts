@@ -117,10 +117,11 @@ blogsRoutes.get('/', async (req: Request, res: Response) => {
   const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
   
   res.status(200).json({
-    totalItems: filteredBlogs.length, // общее количество элементов после фильтрации
-    currentPage: pageNumber, // текущая страница
-    totalPages: Math.ceil(filteredBlogs.length / pageSize), // общее количество страниц
-    blogs: paginatedBlogs // массив блогов для текущей страницы
+    pagesCount: Math.ceil(filteredBlogs.length / pageSize), // общее количество страниц
+    page: pageNumber, // текущая страница
+    pageSize: pageSize,
+    totalCount: filteredBlogs.length, // общее количество элементов после фильтрации
+    items: paginatedBlogs // массив блогов для текущей страницы
   });
 });
   
