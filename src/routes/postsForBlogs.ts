@@ -74,6 +74,14 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
   
   
   postsForBlogsRoutes.get('/blogs/:blogId/posts', async (req: Request, res: Response) => {
+    const searchNameTerm = req.query.searchNameTerm as string || null; // поисковый термин для имени блога
+    const sortBy = req.query.sortBy as string || 'создан в'; // поле для сортировки
+    const sortDirection = req.query.sortDirection as string || 'дескриптор'; // направление сортировки
+    const pageNumber = parseInt(req.query.pageNumber as string) || 1; // номер страницы (по умолчанию 1)
+    const pageSize = parseInt(req.query.pageSize as string) || 10; // количество элементов на странице (по умолчанию 10)
+    const startIndex = (pageNumber - 1) * pageSize; // индекс начального элемента
+    const endIndex = pageNumber * pageSize; // индекс конечного элемента
+    const posts = await socialRepositoryForPostsInBlogs.getPostsInBlogs();
     const blogId = req.params.blogId;
     let blog;
     try {
@@ -84,7 +92,27 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
         field: 'blogId'
       });
     }
+  let filteredPosts = posts;
+  if (searchNameTerm) {
+    filteredPosts = posts.filter(post => post.title.includes(searchNameTerm));
+  }
 
-    const post = await socialRepositoryForPostsInBlogs.getPostsInBlogs();
-    return res.status(200).send(post); // возвращаем массив всех блогов
+  filteredPosts.sort((a, b) => {
+    if (sortDirection === 'по возрастанию') {
+      return a[sortBy] > b[sortBy] ? 1 : -1;
+    } else {
+      return a[sortBy] < b[sortBy] ? 1 : -1;
+    }
+  });
+
+    const paginatedPosts = filteredPosts.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
+
+    
+    return res.status(200).json({
+      pagesCount: Math.ceil(filteredPosts.length / pageSize), // общее количество страниц
+      page: pageNumber, // текущая страница
+      pageSize: pageSize, // размер страницы
+      totalCount: filteredPosts.length, // общее количество элементов после фильтрации
+      items: paginatedPosts // массив постов для текущей страницы
+    });
   });

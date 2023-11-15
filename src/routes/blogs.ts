@@ -116,7 +116,7 @@ blogsRoutes.get('/', async (req: Request, res: Response) => {
   
   const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
   
-  res.status(200).json({
+  return res.status(200).json({
     pagesCount: Math.ceil(filteredBlogs.length / pageSize), // общее количество страниц
     page: pageNumber, // текущая страница
     pageSize: pageSize, // размер страницы

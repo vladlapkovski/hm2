@@ -14,6 +14,7 @@ export type collectionBlogsType = {
 }
 
 export type collectionPostsType = {
+  [key: string]: any;
   id: ObjectId;
   title: string;
   shortDescription: string;
