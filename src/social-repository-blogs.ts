@@ -19,13 +19,13 @@ export const socialRepository = {
     const createdAt1 = new Date().toISOString();
     const objectId = new ObjectId();
     const result = await collection.insertOne({
+      id: objectId,
       name,
       description,
       websiteUrl,
       createdAt: createdAt1,
       isMembership: false,
-      _id: objectId,
-      id: objectId
+      _id: objectId
     });
     return {
       id: result.insertedId,
