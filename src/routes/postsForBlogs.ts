@@ -82,7 +82,7 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
     const startIndex = (pageNumber - 1) * pageSize; // индекс начального элемента
     const endIndex = pageNumber * pageSize; // индекс конечного элемента
     const posts = await socialRepositoryForPostsInBlogs.getPostsInBlogs();
-    const blogId = req.params.blogId;
+    const blogId = new ObjectId(req.params.blogId);
     let blog;
     try {
       blog = await collection.findOne({ _id: new ObjectId(blogId) });

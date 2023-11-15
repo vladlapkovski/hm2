@@ -12,8 +12,37 @@ const encodedAuth = Buffer.from(auth).toString("base64");
 
 
 postsRouter.get('/', async (req: Request, res: Response) => {
-  const post = await socialRepository.getPosts();
-  res.status(200).send(post); // возвращаем массив всех блогов
+  const searchNameTerm = req.query.searchNameTerm as string || null; // поисковый термин для имени блога
+  const sortBy = req.query.sortBy as string || 'создан в'; // поле для сортировки
+  const sortDirection = req.query.sortDirection as string || 'дескриптор'; // направление сортировки
+  const pageNumber = parseInt(req.query.pageNumber as string) || 1; // номер страницы (по умолчанию 1)
+  const pageSize = parseInt(req.query.pageSize as string) || 10; // количество элементов на странице (по умолчанию 10)
+  const startIndex = (pageNumber - 1) * pageSize; // индекс начального элемента
+  const endIndex = pageNumber * pageSize; // индекс конечного элемента
+  const posts = await socialRepository.getPosts();
+
+  let filteredPosts = posts;
+  if (searchNameTerm) {
+    filteredPosts = posts.filter(post => post.title.includes(searchNameTerm));
+  }
+
+  filteredPosts.sort((a, b) => {
+    if (sortDirection === 'по возрастанию') {
+      return a[sortBy] > b[sortBy] ? 1 : -1;
+    } else {
+      return a[sortBy] < b[sortBy] ? 1 : -1;
+    }
+  });
+
+  const paginatedBlogs = filteredPosts.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
+
+  return res.status(200).json({
+    pagesCount: Math.ceil(filteredPosts.length / pageSize), // общее количество страниц
+    page: pageNumber, // текущая страница
+    pageSize: pageSize, // размер страницы
+    totalCount: filteredPosts.length, // общее количество элементов после фильтрации
+    items: paginatedBlogs // массив блогов для текущей страницы
+  });
 });
 
 postsRouter.get('/:id', async (req: Request, res: Response) => {
