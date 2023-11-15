@@ -26,7 +26,10 @@ export const socialRepository = {
     
     let blog;
     try {
-      blog = await collection.findOne({ _id: new ObjectId(blogId) });
+      blog = await collection.findOne(
+        { _id: new ObjectId(blogId) },
+        { projection: { name: 1 } }
+      );
     } catch (error) {
       return undefined;
     }
@@ -35,7 +38,8 @@ export const socialRepository = {
       return undefined;
     }
 
-    const BLOGNAME = blog.name;
+    
+    const BLOGNAME = (blog as { name: string }).name;
     const createdAt2 = new Date().toISOString();
     const objectId1 = new ObjectId();
     const result = await collection1.insertOne({
@@ -98,7 +102,10 @@ export const updateIDPost = {
 
     let blog;
     try {
-      blog = await collection.findOne({ _id: new ObjectId(blogId) });
+      blog = await collection.findOne(
+        { _id: new ObjectId(blogId) },
+        { projection: { name: 1 } }
+      );
     } catch (error) {
       return undefined;
     }
@@ -107,7 +114,7 @@ export const updateIDPost = {
       return undefined;
     }
 
-    const BLOGNAME = blog.name;
+    const BLOGNAME = (blog as { name: string }).name;
     const updatePostDocument = {
       $set: {
         title,

@@ -1,5 +1,6 @@
 import { collection, collection1, collectionBlogsType, collectionPostsType } from './db';
 import { ObjectId } from 'mongodb';
+import { blogsRoutes } from './routes/blogs';
 
 export const socialRepository = {
   async getBlogs(): Promise<collectionBlogsType[]> {
@@ -26,7 +27,6 @@ export const socialRepository = {
       _id: objectId,
       id: objectId
     });
-
     return {
       id: result.insertedId,
       name,
@@ -37,7 +37,6 @@ export const socialRepository = {
     };
   }
 };
-
 export const getIDBlog = {
   async getBlog(): Promise<collectionBlogsType[]> {
     const foundBlogs = await collection.find({}).toArray();
@@ -86,66 +85,5 @@ export const updateIDBlog = {
 };
   
 
-
-
-
-export const socialRepository1 = {
-  async getPosts(): Promise<collectionPostsType[]> {
-    const foundPosts = await collection1.find({}).toArray();
-    const posts = foundPosts.map((post) => {
-      const { _id, ...rest } = post;
-      return rest;
-    });
-    return posts;
-  },
-
-  async createPost1(
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-    blogName: string,
-    createdAt: string
-  ): Promise<collectionPostsType | undefined> {
-    if (!title.trim() || !shortDescription.trim() || !content.trim() || !blogId.trim()) {
-      return undefined;
-    }
-    
-    let blog;
-    try {
-      blog = await collection.findOne({ _id: new ObjectId(blogId) });
-    } catch (error) {
-      return undefined;
-    }
-
-    if (typeof blog !== "object" || !blog) {
-      return undefined;
-    }
-
-    const BLOGNAME = blog.name;
-    const createdAt2 = new Date().toISOString();
-    const objectId1 = new ObjectId();
-    const result = await collection1.insertOne({
-      title,
-      shortDescription,
-      content,
-      blogId,
-      blogName: BLOGNAME,
-      createdAt: createdAt2,
-      _id: objectId1,
-      id: objectId1
-    });
-
-    return {
-      id: result.insertedId,
-      title,
-      shortDescription,
-      content,
-      blogId,
-      blogName: BLOGNAME,
-      createdAt: createdAt2
-    };
-  }
-};
 
 

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export type collectionBlogsType = {
+  [key: string]: any;
   id: ObjectId;
   name: string;
   description: string;
@@ -20,7 +21,7 @@ export type collectionPostsType = {
   blogId: string;
   blogName: string;
   createdAt: string;
-  }
+}
 
 const URL = process.env.MONGO_URL;
 console.log("url:", URL);
@@ -32,6 +33,8 @@ const client = new MongoClient(URL);
 export const collection = client.db().collection<collectionBlogsType>("social");
 
 export const collection1 = client.db().collection<collectionPostsType>("Postsocial");
+
+export const collection2 = client.db().collection<collectionPostsType>("PostForBlogs");
 
 export const runDb = async () => {
   try {

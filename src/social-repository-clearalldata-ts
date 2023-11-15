@@ -1,13 +1,14 @@
+import { WithId } from 'mongodb';
 import { collection, collection1, collectionPostsType, collectionBlogsType } from './db'
 
 export const deleteAllPostData = {
-    async deletePost(): Promise<void | collectionPostsType[]> {
-      return collection1.find({}).toArray();
-    }
+  async deletePost(): Promise<WithId<collectionPostsType | collectionBlogsType>[]> {
+    return collection1.find({}).toArray();
+  }
 }
 
 export const deleteAllBlogData = {
-    async deleteBlog(): Promise<void | collectionBlogsType[]> {
-      return collection.find({}).toArray();
-    }
+  async deleteBlog(): Promise<WithId<collectionPostsType | collectionBlogsType>[]> {
+    return collection.find({}).toArray();
+  }
 }

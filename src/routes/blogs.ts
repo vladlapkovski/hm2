@@ -1,5 +1,6 @@
 import express, {Request, Response, Router} from "express"
-import { getIDBlog, socialRepository, socialRepository1 } from "../social-repository-blogs";
+import { getIDBlog, socialRepository } from "../social-repository-blogs";
+import { socialRepositoryForPostsInBlogs } from "../social-repositoryForPostsInBlogs"
 import { collection, collectionBlogsType, collectionPostsType } from '../db';
 export const blogsRoutes = Router({}) 
 import { ObjectId } from 'mongodb';
@@ -89,8 +90,38 @@ blogsRoutes.post('/', async (req: Request, res: Response) => {
   
   
 blogsRoutes.get('/', async (req: Request, res: Response) => {
-  const blog = await socialRepository.getBlogs();
-  res.status(200).send(blog); // возвращаем массив всех блогов
+  const searchNameTerm = req.query.searchNameTerm as string || null; // поисковый термин для имени блога
+  const sortBy = req.query.sortBy as string || 'создан в'; // поле для сортировки
+  const sortDirection = req.query.sortDirection as string || 'дескриптор'; // направление сортировки
+  const pageNumber = parseInt(req.query.pageNumber as string) || 1; // номер страницы (по умолчанию 1)
+  const pageSize = parseInt(req.query.pageSize as string) || 10; // количество элементов на странице (по умолчанию 10)
+  const startIndex = (pageNumber - 1) * pageSize; // индекс начального элемента
+  const endIndex = pageNumber * pageSize; // индекс конечного элемента
+  const blogs = await socialRepository.getBlogs();
+  
+  // Применяем фильтрацию по поисковому термину, если он указан
+  let filteredBlogs = blogs;
+  if (searchNameTerm) {
+    filteredBlogs = blogs.filter(blog => blog.name.includes(searchNameTerm));
+  }
+  
+  // Применяем сортировку
+  filteredBlogs.sort((a, b) => {
+    if (sortDirection === 'по возрастанию') {
+      return a[sortBy] > b[sortBy] ? 1 : -1;
+    } else {
+      return a[sortBy] < b[sortBy] ? 1 : -1;
+    }
+  });
+  
+  const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
+  
+  res.status(200).json({
+    totalItems: filteredBlogs.length, // общее количество элементов после фильтрации
+    currentPage: pageNumber, // текущая страница
+    totalPages: Math.ceil(filteredBlogs.length / pageSize), // общее количество страниц
+    blogs: paginatedBlogs // массив блогов для текущей страницы
+  });
 });
   
   
@@ -164,71 +195,3 @@ blogsRoutes.put('/:id', async (req: Request, res: Response) => {
 
 
 
-blogsRoutes.post('/:blogId/posts', async (req: Request, res: Response) => {
-    
-  const { title, shortDescription, content, blogId, blogName, createdAt } = req.body as collectionPostsType;
- 
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
-    return res.status(401).send();
-  }
-
-    // Проверяем, что все обязательные поля заполнены
-  const errorsMessages = [];
-  const noUseErrors = [];
-
-  let blog;
-    try {
-      blog = await collection.findOne({ _id: new ObjectId(blogId) });
-    } catch (error) {
-      noUseErrors.push({
-        message: 'Invalid blogId',
-        field: 'blogId'
-      });
-    }
-
-    if (typeof blog !== "object" || !blog) {
-      errorsMessages.push({
-        message: 'Invalid blogId',
-        field: 'blogId'
-      });
-    }
-
-
-  
-  
-  if (!title || title?.trim()?.length == 0 || title?.length > 30) {
-    errorsMessages.push({
-      message: 'Invalid title',
-      field: 'title'
-    });
-  }
-  if (!shortDescription || shortDescription?.length > 100) {
-    errorsMessages.push({
-      message: 'Invalid shortDescription',
-      field: 'shortDescription'
-    });
-  }
-  if (!content || content?.trim()?.length == 0 || content?.length > 1000) {
-    errorsMessages.push({
-      message: 'Invalid content',
-      field: 'content'
-    });
-  }
-   
-  if (errorsMessages.length > 0) {
-    return res.status(400).json({
-      errorsMessages
-    });
-  } 
-
-  
-
-  // Создаем новый пост
-  const newPost = await socialRepository1.createPost1(title, shortDescription, content, blogId, blogName, createdAt);
-
-  // Возвращаем созданный пост с кодом 201
-  return res.status(201).json(newPost);
-
-});
