@@ -107,7 +107,7 @@ blogsRoutes.get('/', async (req: Request, res: Response) => {
   
   // Применяем сортировку
   filteredBlogs.sort((a, b) => {
-    if (sortDirection === 'desc') {
+    if (sortDirection === 'asc') {
       return a[sortBy] > b[sortBy] ? 1 : -1;
     } else {
       return a[sortBy] < b[sortBy] ? 1 : -1;
