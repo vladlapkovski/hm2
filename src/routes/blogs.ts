@@ -119,7 +119,7 @@ blogsRoutes.get('/', async (req: Request, res: Response) => {
   res.status(200).json({
     pagesCount: Math.ceil(filteredBlogs.length / pageSize), // общее количество страниц
     page: pageNumber, // текущая страница
-    pageSize: pageSize,
+    pageSize: pageSize, // размер страницы
     totalCount: filteredBlogs.length, // общее количество элементов после фильтрации
     items: paginatedBlogs // массив блогов для текущей страницы
   });
