@@ -23,7 +23,7 @@ postsRouter.get('/', async (req: Request, res: Response) => {
 
   let filteredPosts = posts;
   if (searchNameTerm) {
-    filteredPosts = posts.filter(post => post.title.includes(searchNameTerm));
+    filteredPosts = posts.filter(post => post.title.toLowerCase().includes(searchNameTerm.toLowerCase()));
   }
 
   filteredPosts.sort((a, b) => {
