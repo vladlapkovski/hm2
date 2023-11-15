@@ -91,7 +91,7 @@ blogsRoutes.post('/', async (req: Request, res: Response) => {
   
 blogsRoutes.get('/', async (req: Request, res: Response) => {
   const searchNameTerm = req.query.searchNameTerm as string || null; // поисковый термин для имени блога
-  const sortBy = req.query.sortBy as string || 'создан в'; // поле для сортировки
+  const sortBy = req.query.sortBy as string || 'createdAt'; // поле для сортировки
   const sortDirection = req.query.sortDirection as string || 'desc'; // направление сортировки
   const pageNumber = parseInt(req.query.pageNumber as string) || 1; // номер страницы (по умолчанию 1)
   const pageSize = parseInt(req.query.pageSize as string) || 10; // количество элементов на странице (по умолчанию 10)
@@ -107,7 +107,7 @@ blogsRoutes.get('/', async (req: Request, res: Response) => {
   
   // Применяем сортировку
   filteredBlogs.sort((a, b) => {
-    if (sortDirection === 'по возрастанию') {
+    if (sortDirection === 'asc') {
       return a[sortBy] > b[sortBy] ? 1 : -1;
     } else {
       return a[sortBy] < b[sortBy] ? 1 : -1;
