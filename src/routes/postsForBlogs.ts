@@ -75,8 +75,8 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
   
   postsForBlogsRoutes.get('/blogs/:blogId/posts', async (req: Request, res: Response) => {
     const searchNameTerm = req.query.searchNameTerm as string || null; // поисковый термин для имени блога
-    const sortBy = req.query.sortBy as string || 'создан в'; // поле для сортировки
-    const sortDirection = req.query.sortDirection as string || 'дескриптор'; // направление сортировки
+    const sortBy = req.query.sortBy as string || 'createdAt'; // поле для сортировки
+    const sortDirection = req.query.sortDirection as string || 'desc'; // направление сортировки
     const pageNumber = parseInt(req.query.pageNumber as string) || 1; // номер страницы (по умолчанию 1)
     const pageSize = parseInt(req.query.pageSize as string) || 10; // количество элементов на странице (по умолчанию 10)
     const startIndex = (pageNumber - 1) * pageSize; // индекс начального элемента
@@ -94,7 +94,7 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
     }
   let filteredPosts = posts;
   if (searchNameTerm) {
-    filteredPosts = posts.filter(post => post.title.includes(searchNameTerm));
+    filteredPosts = posts.filter(post => post.title.toLowerCase().includes(searchNameTerm.toLowerCase()));
   }
 
   filteredPosts.sort((a, b) => {
