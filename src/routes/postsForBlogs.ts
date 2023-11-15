@@ -98,7 +98,7 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
   }
 
   filteredPosts.sort((a, b) => {
-    if (sortDirection === 'по возрастанию') {
+    if (sortDirection === 'asc') {
       return a[sortBy] > b[sortBy] ? 1 : -1;
     } else {
       return a[sortBy] < b[sortBy] ? 1 : -1;
