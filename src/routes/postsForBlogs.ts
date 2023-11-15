@@ -60,7 +60,7 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
     }
     
     if (errorsMessages.length > 0) {
-      return res.status(404).json({
+      return res.status(400).json({
         errorsMessages
       });
     } 
