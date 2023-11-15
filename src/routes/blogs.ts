@@ -95,14 +95,14 @@ blogsRoutes.get('/', async (req: Request, res: Response) => {
   const sortDirection = req.query.sortDirection as string || 'desc'; // направление сортировки
   const pageNumber = parseInt(req.query.pageNumber as string) || 1; // номер страницы (по умолчанию 1)
   const pageSize = parseInt(req.query.pageSize as string) || 10; // количество элементов на странице (по умолчанию 10)
-  const startIndex = (pageNumber) * pageSize; // индекс начального элемента
+  const startIndex = (pageNumber - 1) * pageSize; // индекс начального элемента
   const endIndex = pageNumber * pageSize; // индекс конечного элемента
   const blogs = await socialRepository.getBlogs();
   
   // Применяем фильтрацию по поисковому термину, если он указан
   let filteredBlogs = blogs;
   if (searchNameTerm) {
-    filteredBlogs = blogs.filter(blog => blog.name.includes(searchNameTerm));
+    filteredBlogs = blogs.filter(blog => blog.name.toLowerCase().includes(searchNameTerm.toLowerCase()));
   }
   
   // Применяем сортировку
