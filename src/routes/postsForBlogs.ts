@@ -33,7 +33,7 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
     }
   
     if (typeof blog !== "object" || !blog) {
-      return res.status(400).json({
+      return res.status(404).json({
         message: 'Invalid blogId',
         field: 'blogId'
       });
@@ -60,7 +60,7 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
     }
     
     if (errorsMessages.length > 0) {
-      return res.status(400).json({
+      return res.status(404).json({
         errorsMessages
       });
     } 
