@@ -39,6 +39,7 @@ export const socialRepositoryForPostsInBlogs = {
       const createdAt2 = new Date().toISOString();
       const objectId1 = new ObjectId();
       const result = await collection1.insertOne({
+        id: objectId1,
         title,
         shortDescription,
         content,
@@ -46,7 +47,6 @@ export const socialRepositoryForPostsInBlogs = {
         blogName: BLOGNAME,
         createdAt: createdAt2,
         _id: objectId1,
-        id: objectId1
       });
   
       return {
