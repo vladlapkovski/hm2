@@ -84,15 +84,23 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
     const posts = await socialRepositoryForPostsInBlogs.getPostsInBlogs();
     const blogId = new ObjectId(req.params.blogId);
     let blog;
-    try {
-      blog = await collection.findOne({ _id: new ObjectId(blogId) });
-    } catch (error) {
-      return res.status(404).json({
-        message: 'Invalid blogId',
-        field: 'blogId'
-      });
-    }
-  let filteredPosts = posts;
+  try {
+    blog = await collection.findOne({ _id: blogId });
+  } catch (error) {
+    return res.status(404).json({
+      message: 'Invalid blogId',
+      field: 'blogId'
+    });
+  }
+
+  if (!blog) {
+    return res.status(404).json({
+      message: 'Invalid blogId',
+      field: 'blogId'
+    });
+  }
+
+  let filteredPosts = posts.filter(post => post.blogId === req.params.blogId);
   if (searchNameTerm) {
     filteredPosts = posts.filter(post => post.title.toLowerCase().includes(searchNameTerm.toLowerCase()));
   }
@@ -104,7 +112,7 @@ postsForBlogsRoutes.post('/blogs/:blogId/posts', async (req: Request, res: Respo
       return a[sortBy] < b[sortBy] ? 1 : -1;
     }
   });
-
+    
     const paginatedPosts = filteredPosts.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
 
     
