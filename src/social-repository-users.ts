@@ -24,7 +24,8 @@ export const socialRepositoryForUsers = {
         login,
         password,
         email,
-        createdAt: createdAtUser
+        createdAt: createdAtUser,
+        _id: objectId
       });
       return {
         id: result.insertedId,
