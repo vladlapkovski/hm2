@@ -12,10 +12,10 @@ const app = express();
 const parserMiddleware = express.json()
 
 app.use(parserMiddleware)
-app.use("/hometask_04/api/blogs", blogsRoutes)
-app.use("/hometask_04/api", postsForBlogsRoutes)
-app.use("/hometask_04/api/posts", postsRouter)
-app.use("/hometask_04/api/testing/all-data", dataRouter)
+app.use("/hometask_05/api/blogs", blogsRoutes)
+app.use("/hometask_05/api", postsForBlogsRoutes)
+app.use("/hometask_05/api/posts", postsRouter)
+app.use("/hometask_05/api/testing/all-data", dataRouter)
 // app.use("/hometask_05/api/auth/login", authRoutes)
 app.use("/hometask_05/api/users", usersRoutes)
 return app;
