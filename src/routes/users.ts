@@ -26,15 +26,18 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
   
     // Применяем фильтрацию по поисковым терминам, если они указаны
     let filteredUsers = users;
+    let filteredUsers1 = users;
     if (searchLoginTerm) {
       filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
     }
     if (searchEmailTerm) {
-      filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+      filteredUsers1 = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
     }
   
+    let filteredUsersReturnedVersion = Object.assign(filteredUsers, filteredUsers1)
+
     // Применяем сортировку
-    filteredUsers.sort((a, b) => {
+    filteredUsersReturnedVersion.sort((a, b) => {
       if (sortDirection === 'asc') {
         return a[sortBy] > b[sortBy] ? 1 : -1;
       } else {
@@ -42,13 +45,13 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
       }
     });
   
-    const paginatedUsers = filteredUsers.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
+    const paginatedUsers = filteredUsersReturnedVersion.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
   
     return res.status(200).json({
-      pagesCount: Math.ceil(filteredUsers.length / pageSize), // общее количество страниц
+      pagesCount: Math.ceil(filteredUsersReturnedVersion.length / pageSize), // общее количество страниц
       page: pageNumber, // текущая страница
       pageSize: pageSize, // размер страницы
-      totalCount: filteredUsers.length, // общее количество элементов после фильтрации
+      totalCount: filteredUsersReturnedVersion.length, // общее количество элементов после фильтрации
       items: paginatedUsers // массив пользователей для текущей страницы
     });
   });
