@@ -31,7 +31,7 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
       filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
     }
     if (searchEmailTerm) {
-      filteredUsers1 = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+      filteredUsers1 = filteredUsers1.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
     }
   
     let filteredUsers2 = [...filteredUsers, ...filteredUsers1]
