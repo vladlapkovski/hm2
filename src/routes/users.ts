@@ -27,7 +27,7 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
     // Применяем фильтрацию по поисковым терминам, если они указаны
     let filteredUsers = users;
     if (searchLoginTerm && searchEmailTerm) {
-      filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) && user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+      filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) || user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
     }
 
     if (searchLoginTerm && !searchEmailTerm) {
