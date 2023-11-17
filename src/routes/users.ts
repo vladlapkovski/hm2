@@ -34,7 +34,9 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
       filteredUsers1 = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
     }
   
-    let filteredUsersReturnedVersion = Object.assign(filteredUsers, filteredUsers1)
+    let filteredUsers2 = [...filteredUsers, ...filteredUsers1]
+
+    let filteredUsersReturnedVersion = [...new Set(filteredUsers2)]
 
     // Применяем сортировку
     filteredUsersReturnedVersion.sort((a, b) => {
