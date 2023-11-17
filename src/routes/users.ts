@@ -26,13 +26,21 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
   
     // Применяем фильтрацию по поисковым терминам, если они указаны
     let filteredUsers = users;
-    if (searchLoginTerm) {
-      filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
+    if (searchEmailTerm && searchLoginTerm) {
+      filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) || user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
     } else if (searchEmailTerm) {
       filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-    } else if (searchEmailTerm && searchLoginTerm) {
-      filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) || user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+    } else if (searchLoginTerm) {
+      filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
     }
+
+    // if (searchLoginTerm) {
+    //   filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
+    // } else if (searchEmailTerm) {
+    //   filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+    // } else if (searchEmailTerm && searchLoginTerm) {
+    //   filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) || user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+    // }
 
     // Применяем сортировку
     filteredUsers.sort((a, b) => {
