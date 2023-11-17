@@ -87,9 +87,9 @@ if (typeof password !== "string" || !password || password?.trim()?.length == 0 |
     });
 }
 
-const emailRegex = new RegExp('^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+// const emailRegex = new RegExp('^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
-if (typeof email !== "string" || !email || !emailRegex.test(email)) {
+if (typeof email !== "string" || !email) {
     errorsMessages.push({
     message: 'Invalid email', 
     field: "email"
