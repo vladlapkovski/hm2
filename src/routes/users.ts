@@ -28,9 +28,13 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
     let filteredUsers = users;
     if (searchEmailTerm && searchLoginTerm) {
       filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) || user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-    } else if (searchEmailTerm) {
+    } 
+
+    if (searchEmailTerm) {
       filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-    } else if (searchLoginTerm) {
+    } 
+    
+    if (searchLoginTerm) {
       filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
     }
 
