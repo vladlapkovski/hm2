@@ -26,19 +26,16 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
   
     // Применяем фильтрацию по поисковым терминам, если они указаны
     let filteredUsers = users;
-    let filteredUsers1 = users;
     if (searchLoginTerm) {
       filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
+    } else if (searchEmailTerm) {
+      filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+    } else if (searchEmailTerm && searchLoginTerm) {
+      filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) || user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
     }
-    if (searchEmailTerm) {
-      filteredUsers1 = filteredUsers1.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-    }
-  
-    let filteredUsersSet = new Set([...filteredUsers, ...filteredUsers1]);
-    let filteredUsersReturnedVersion = [...filteredUsersSet];
 
     // Применяем сортировку
-    filteredUsersReturnedVersion.sort((a, b) => {
+    filteredUsers.sort((a, b) => {
       if (sortDirection === 'asc') {
         return a[sortBy] > b[sortBy] ? 1 : -1;
       } else {
@@ -46,13 +43,13 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
       }
     });
   
-    const paginatedUsers = filteredUsersReturnedVersion.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
+    const paginatedUsers = filteredUsers.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
   
     return res.status(200).json({
-      pagesCount: Math.ceil(filteredUsersReturnedVersion.length / pageSize), // общее количество страниц
+      pagesCount: Math.ceil(filteredUsers.length / pageSize), // общее количество страниц
       page: pageNumber, // текущая страница
       pageSize: pageSize, // размер страницы
-      totalCount: filteredUsersReturnedVersion.length, // общее количество элементов после фильтрации
+      totalCount: filteredUsers.length, // общее количество элементов после фильтрации
       items: paginatedUsers // массив пользователей для текущей страницы
     });
   });
