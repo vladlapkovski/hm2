@@ -46,9 +46,6 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
       filteredUsers = Array.from(new Set(filteredUsers3));
     }
 
-    
-
-
 
     // if (searchEmailTerm && searchLoginTerm) {
     //   filteredUsers = filteredUsers.filter(user => {
