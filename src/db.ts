@@ -25,6 +25,7 @@ export type collectionPostsType = {
 }
 
 export type collectionAuthType = {
+  [key: string]: any;
   loginOrEmail: string;
   password: string;
 }
@@ -34,7 +35,7 @@ export type CreateUserType = {
   [key: string]: any;
   id: ObjectId;
   login: string;
-  password: string;
+  userPassword: string;
   email: string;
   createdAt: string;
 }
