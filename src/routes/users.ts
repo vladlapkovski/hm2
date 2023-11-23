@@ -13,69 +13,45 @@ const encodedAuth = Buffer.from(auth).toString("base64");
 
 
 usersRoutes.get('/', async (req: Request, res: Response) => {
-    const searchLoginTerm = req.query.searchNameTerm as string //|| null; // поисковый термин для имени пользователя
-    const searchEmailTerm = req.query.searchEmailTerm as string //|| null; // поисковый термин для email пользователя
-    const sortBy = req.query.sortBy as string || 'createdAt'; // поле для сортировки
-    const sortDirection = req.query.sortDirection as string || 'desc'; // направление сортировки
-    const pageNumber = parseInt(req.query.pageNumber as string) || 1; // номер страницы (по умолчанию 1)
-    const pageSize = parseInt(req.query.pageSize as string) || 10; // количество элементов на странице (по умолчанию 10)
-    const startIndex = (pageNumber - 1) * pageSize; // индекс начального элемента
-    const endIndex = pageNumber * pageSize; // индекс конечного элемента
-  
-    const users = await socialRepositoryForUsers.getUsers(searchLoginTerm, searchEmailTerm);
+  const searchLoginTerm = req.query.searchLoginTerm as string || null; // поисковый термин для имени пользователя
+  const searchEmailTerm = req.query.searchEmailTerm as string || null; // поисковый термин для email пользователя
+  const sortBy = req.query.sortBy as string || 'createdAt'; // поле для сортировки
+  const sortDirection = req.query.sortDirection as string || 'desc'; // направление сортировки
+  const pageNumber = parseInt(req.query.pageNumber as string) || 1; // номер страницы (по умолчанию 1)
+  const pageSize = parseInt(req.query.pageSize as string) || 10; // количество элементов на странице (по умолчанию 10)
+  const startIndex = (pageNumber - 1) * pageSize; // индекс начального элемента
+  const endIndex = pageNumber * pageSize; // индекс конечного элемента
 
-    
-  
-    // Применяем фильтрацию по поисковым терминам, если они указаны
-    let filteredUsers = users;
-    // let filteredUsers1 = users;
-    // if (searchLoginTerm && searchEmailTerm) {
-    //   filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) || user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-    // }
+  const users = await socialRepositoryForUsers.getUsers();
 
-    // if (searchLoginTerm && !searchEmailTerm) {
-    //   filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
-    // }
+  // Применяем фильтрацию по поисковым терминам, если они указаны
+  let filteredUsers = users;
+  if (searchLoginTerm) {
+    filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
+  }
+  if (searchEmailTerm) {
+    filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+  }
 
-    // if (!searchLoginTerm && searchEmailTerm) {
-    //   filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-    // }
-
-    // if (searchLoginTerm && searchEmailTerm) {
-    //   filteredUsers1 = filteredUsers1.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
-    //   filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-    //   let filteredUsers3 = [...filteredUsers1, ...filteredUsers];
-    //   filteredUsers = Array.from(new Set(filteredUsers3));
-    // }
-
-
-    // if (searchEmailTerm && searchLoginTerm) {
-    //   filteredUsers = filteredUsers.filter(user => {
-    //     const loginMatch = searchLoginTerm ? user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) : true;
-    //     const emailMatch = searchEmailTerm ? user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()) : true;
-    //     return loginMatch && emailMatch;
-    //   });
-    // }
-
-    // Применяем сортировку
-    filteredUsers.sort((a, b) => {
-      if (sortDirection === 'asc') {
-        return a[sortBy] > b[sortBy] ? 1 : -1;
-      } else {
-        return a[sortBy] < b[sortBy] ? 1 : -1;
-      }
-    });
-  
-    const paginatedUsers = filteredUsers.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
-  
-    return res.status(200).json({
-      pagesCount: Math.ceil(filteredUsers.length / pageSize), // общее количество страниц
-      page: pageNumber, // текущая страница
-      pageSize: pageSize, // размер страницы
-      totalCount: filteredUsers.length, // общее количество элементов после фильтрации
-      items: paginatedUsers // массив пользователей для текущей страницы
-    });
+  // Применяем сортировку
+  filteredUsers.sort((a, b) => {
+    if (sortDirection === 'asc') {
+      return a[sortBy] > b[sortBy] ? 1 : -1;
+    } else {
+      return a[sortBy] < b[sortBy] ? 1 : -1;
+    }
   });
+
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex); // получаем только нужные элементы для текущей страницы
+
+  return res.status(200).json({
+    pagesCount: Math.ceil(filteredUsers.length / pageSize), // общее количество страниц
+    page: pageNumber, // текущая страница
+    pageSize: pageSize, // размер страницы
+    totalCount: filteredUsers.length, // общее количество элементов после фильтрации
+    items: paginatedUsers // массив пользователей для текущей страницы
+  });
+});
 
 
 

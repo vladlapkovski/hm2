@@ -4,21 +4,14 @@ import { blogsRoutes } from './routes/blogs';
 
 
 export const socialRepositoryForUsers = {
-    async getUsers(searchLoginTerm: string, searchEmailTerm: string ): Promise<GetUserType[]> {
-      let foundUsers
-
-      if (searchLoginTerm || searchEmailTerm) {
-        foundUsers = await collection3.find({ $or: [{ login:"/" + searchLoginTerm + "/" }, { email:"/" +searchEmailTerm + "/" }] }).toArray()
-      } else {
-        foundUsers = await collection3.find({}).toArray();
-      }
-      
-      const users = foundUsers.map((user) => {
-        const { _id, password, ...rest } = user;
-        return rest;
-      });
-      return users;
-    },
+  async getUsers(): Promise<GetUserType[]> {
+    const foundUsers = await collection3.find({}).toArray();
+    const users = foundUsers.map((user) => {
+      const { _id, password, ...rest } = user;
+      return rest;
+    });
+    return users;
+  },
   
     async createUser(login: string, password: string, email: string, createdAt: string): Promise<GetUserType | undefined> {
       if (!login.trim() || !password.trim() || !email.trim()) {
