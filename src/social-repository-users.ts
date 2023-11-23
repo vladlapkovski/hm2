@@ -4,8 +4,15 @@ import { blogsRoutes } from './routes/blogs';
 
 
 export const socialRepositoryForUsers = {
-    async getUsers(): Promise<GetUserType[]> {
-      const foundUsers = await collection3.find({}).toArray();
+    async getUsers(searchLoginTerm: string, searchEmailTerm: string ): Promise<GetUserType[]> {
+      let foundUsers
+
+      if (searchLoginTerm || searchEmailTerm) {
+        foundUsers = await collection3.find({ $or: [{ login:"/" + searchLoginTerm + "/" }, { email:"/" +searchEmailTerm + "/" }] }).toArray()
+      } else {
+        foundUsers = await collection3.find({}).toArray();
+      }
+      
       const users = foundUsers.map((user) => {
         const { _id, password, ...rest } = user;
         return rest;

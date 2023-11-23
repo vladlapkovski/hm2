@@ -13,8 +13,8 @@ const encodedAuth = Buffer.from(auth).toString("base64");
 
 
 usersRoutes.get('/', async (req: Request, res: Response) => {
-    const searchLoginTerm = req.query.searchNameTerm as string || null; // поисковый термин для имени пользователя
-    const searchEmailTerm = req.query.searchEmailTerm as string || null; // поисковый термин для email пользователя
+    const searchLoginTerm = req.query.searchNameTerm as string //|| null; // поисковый термин для имени пользователя
+    const searchEmailTerm = req.query.searchEmailTerm as string //|| null; // поисковый термин для email пользователя
     const sortBy = req.query.sortBy as string || 'createdAt'; // поле для сортировки
     const sortDirection = req.query.sortDirection as string || 'desc'; // направление сортировки
     const pageNumber = parseInt(req.query.pageNumber as string) || 1; // номер страницы (по умолчанию 1)
@@ -22,29 +22,31 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
     const startIndex = (pageNumber - 1) * pageSize; // индекс начального элемента
     const endIndex = pageNumber * pageSize; // индекс конечного элемента
   
-    const users = await socialRepositoryForUsers.getUsers();
+    const users = await socialRepositoryForUsers.getUsers(searchLoginTerm, searchEmailTerm);
+
+    
   
     // Применяем фильтрацию по поисковым терминам, если они указаны
     let filteredUsers = users;
-    let filteredUsers1 = users;
+    // let filteredUsers1 = users;
     // if (searchLoginTerm && searchEmailTerm) {
     //   filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) || user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
     // }
 
-    if (searchLoginTerm && !searchEmailTerm) {
-      filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
-    }
+    // if (searchLoginTerm && !searchEmailTerm) {
+    //   filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
+    // }
 
-    if (!searchLoginTerm && searchEmailTerm) {
-      filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-    }
+    // if (!searchLoginTerm && searchEmailTerm) {
+    //   filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+    // }
 
-    if (searchLoginTerm && searchEmailTerm) {
-      filteredUsers1 = filteredUsers1.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
-      filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-      let filteredUsers3 = [...filteredUsers1, ...filteredUsers];
-      filteredUsers = Array.from(new Set(filteredUsers3));
-    }
+    // if (searchLoginTerm && searchEmailTerm) {
+    //   filteredUsers1 = filteredUsers1.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
+    //   filteredUsers = filteredUsers.filter(user => user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
+    //   let filteredUsers3 = [...filteredUsers1, ...filteredUsers];
+    //   filteredUsers = Array.from(new Set(filteredUsers3));
+    // }
 
 
     // if (searchEmailTerm && searchLoginTerm) {
