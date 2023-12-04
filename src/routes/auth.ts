@@ -9,7 +9,7 @@ import { socialRepositoryForAuth } from "../social-repository-auth";
 import { jwtService } from "../aplication/jwt-service";
 
 
-authRoutes.post('/', async (req: Request, res: Response) => {
+authRoutes.post('/login', async (req: Request, res: Response) => {
     const { loginOrEmail, password } = req.body as collectionAuthType;
 
     const errorsMessages = [];
