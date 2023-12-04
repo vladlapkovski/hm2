@@ -18,3 +18,15 @@ export const socialRepositoryForAuth = {
         return rest;
     }
 };
+
+
+// export const getInformationForCurrentUser = {
+//     async getBlog(): Promise<GetUserType> {
+//       const foundCurrentUser = await collection3.find({}).toArray();
+//       const Users = foundCurrentUser.map((user) => {
+//         const { _id, createdAt, ...rest } = user;
+//         return rest;
+//       });
+//       return Users;
+//     }
+//   };

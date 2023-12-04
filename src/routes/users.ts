@@ -27,9 +27,7 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
   // Применяем фильтрацию по поисковым терминам, если они указаны
   let filteredUsers = users;
     let filteredUsers1 = users;
-    // if (searchLoginTerm && searchEmailTerm) {
-    //   filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) || user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()));
-    // }
+   
 
     if (searchLoginTerm && !searchEmailTerm) {
       filteredUsers = filteredUsers.filter(user => user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()));
@@ -45,15 +43,6 @@ usersRoutes.get('/', async (req: Request, res: Response) => {
       let filteredUsers3 = [...filteredUsers1, ...filteredUsers];
       filteredUsers = Array.from(new Set(filteredUsers3));
     }
-
-
-    // if (searchEmailTerm && searchLoginTerm) {
-    //   filteredUsers = filteredUsers.filter(user => {
-    //     const loginMatch = searchLoginTerm ? user.login.toLowerCase().includes(searchLoginTerm.toLowerCase()) : true;
-    //     const emailMatch = searchEmailTerm ? user.email.toLowerCase().includes(searchEmailTerm.toLowerCase()) : true;
-    //     return loginMatch && emailMatch;
-    //   });
-    // }
 
     // Применяем сортировку
     filteredUsers.sort((a, b) => {
