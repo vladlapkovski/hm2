@@ -41,7 +41,7 @@ authRoutes.post('/', async (req: Request, res: Response) => {
     if (user) {
         const JWTtoken = await jwtService.createJWT(user)
         // Если данные верны, возвращаем статус 204
-        return res.status(200).send(`accessToken: ${JWTtoken}`);
+        return res.status(200).json({ accessToken: JWTtoken });
     } else {
         return res.status(401).send(); 
     }
