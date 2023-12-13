@@ -221,9 +221,9 @@ postsRouter.put('/:id', async (req: Request, res: Response) => {
 
 
 
-postsRouter.post('/:postId/comments', async (req: Request, res: Response) => {
+postsRouter.post('/:id/comments', async (req: Request, res: Response) => {
 
-  const postId = new ObjectId(req.params.id);
+  const id = new ObjectId(req.params.id);
   
   const { content,createdAt, commentatorInfo, userId, userLogin } = req.body as GetPostComment;
  
@@ -239,7 +239,7 @@ postsRouter.post('/:postId/comments', async (req: Request, res: Response) => {
 
   let post;
     try {
-      post = await collection1.findOne({ _id: new ObjectId(postId) });
+      post = await collection1.findOne({ _id: new ObjectId(id) });
     } catch (error) {
       noUseErrors.push({
         message: 'Invalid postId',
