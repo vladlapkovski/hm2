@@ -1,4 +1,4 @@
-import { collection, collection1, collectionPostsType } from './db';
+import { GetPostComment, collection, collection1, collection4, collectionPostsType } from './db';
 import { ObjectId } from 'mongodb';
 
 
@@ -140,5 +140,45 @@ export const updateIDPost = {
     } else {
       return undefined;
     }
+  }
+};
+
+
+
+export const CreateCommentForPost = {
+  async getComment(): Promise<GetPostComment[]> {
+    const foundComment = await collection4.find({}).toArray();
+    const Comments = foundComment.map((Comment) => {
+      const { _id, ...rest } = Comment;
+      return rest;
+    });
+    return Comments;
+  },
+
+  async createComment(content: string, commentatorInfo: {userId: string, userlogin: string}, createdAt: string): Promise<GetPostComment | undefined> {
+    if (!content.trim()) {
+      return undefined;
+    }
+    const createdAt1 = new Date().toISOString();
+    const objectId = new ObjectId();
+    const result = await collection4.insertOne({
+      id: objectId,
+      content,
+      commentatorInfo: {
+        userId: "341",
+        userLogin: "123"
+      },
+      createdAt: createdAt1,
+      _id: objectId
+    });
+    return {
+      id: result.insertedId,
+      content,
+      commentatorInfo: {
+        userId: "341",
+        userLogin: "123"
+      },
+      createdAt: createdAt1
+    };
   }
 };
