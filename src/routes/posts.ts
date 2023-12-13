@@ -229,9 +229,9 @@ postsRouter.post('/:postId/comments', async (req: Request, res: Response) => {
  
   const authHeader = req.headers.authorization;
 
-  if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
-    return res.status(402).send();
-  }
+  // if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
+  //   return res.status(401).send();
+  // }
 
     // Проверяем, что все обязательные поля заполнены
   const errorsMessages = [];
