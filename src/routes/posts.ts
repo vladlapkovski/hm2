@@ -230,7 +230,7 @@ postsRouter.post('/:postId/comments', async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
-    return res.status(401).send();
+    return res.status(402).send();
   }
 
     // Проверяем, что все обязательные поля заполнены
@@ -261,6 +261,12 @@ postsRouter.post('/:postId/comments', async (req: Request, res: Response) => {
     errorsMessages.push({
       message: 'Invalid content',
       field: 'content'
+    });
+  }
+
+  if (errorsMessages.length > 0) {
+    return res.status(400).json({
+      errorsMessages
     });
   }
   
