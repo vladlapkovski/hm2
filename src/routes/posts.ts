@@ -1,6 +1,11 @@
 import express, {Request, Response, Router} from "express"
+<<<<<<< HEAD
 import { CreateCommentsRepository, socialRepository, updateIDPost } from "../social-repository-posts";
 import { collection, collectionPostsType, collection1, CreateComments, collection3 } from "../db";
+=======
+import { CreateCommentForPost, socialRepository, updateIDPost } from "../social-repository-posts";
+import { collection, collectionPostsType, collection1, CreateCommentsType, GetPostComment, collection2 } from "../db";
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad
 import { Collection, ObjectId } from 'mongodb';
 import { jwtService } from "../aplication/jwt-service";
 import { log } from "console";
@@ -222,6 +227,7 @@ postsRouter.put('/:id', async (req: Request, res: Response) => {
 
 
 
+<<<<<<< HEAD
 postsRouter.post('/id/comments', async (req: Request, res: Response) => {
   const { content } = req.body as CreateComments;
 
@@ -248,6 +254,48 @@ postsRouter.post('/id/comments', async (req: Request, res: Response) => {
     errorsMessages.push({
       message: 'Invalid content',
       field: 'title'
+=======
+postsRouter.post('/:id/comments', async (req: Request, res: Response) => {
+
+  const id = new ObjectId(req.params.id);
+  
+  const { content,createdAt, commentatorInfo, userId, userLogin } = req.body as GetPostComment;
+ 
+  const authHeader = req.headers.authorization;
+
+  // if (!authHeader || authHeader !== `Basic ${encodedAuth}`) {
+  //   return res.status(401).send();
+  // }
+
+    // Проверяем, что все обязательные поля заполнены
+  const errorsMessages = [];
+  const noUseErrors = [];
+
+  let post;
+    try {
+      post = await collection1.findOne({ _id: new ObjectId(id) });
+    } catch (error) {
+      noUseErrors.push({
+        message: 'Invalid postId',
+        field: 'postId'
+      });
+    }
+
+    if (typeof post !== "object" || !post) {
+      errorsMessages.push({
+        message: 'Invalid postId',
+        field: 'postId'
+      });
+    }
+
+
+  
+  
+  if (!content|| content?.trim()?.length == 0 || content?.length > 300 || content?.length < 20) {
+    errorsMessages.push({
+      message: 'Invalid content',
+      field: 'content'
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad
     });
   }
 
@@ -256,6 +304,7 @@ postsRouter.post('/id/comments', async (req: Request, res: Response) => {
       errorsMessages
     });
   }
+<<<<<<< HEAD
 
   // Создаем новый пост
   const newComment = await CreateCommentsRepository.CreateComment(content, rest);
@@ -263,3 +312,16 @@ postsRouter.post('/id/comments', async (req: Request, res: Response) => {
   // Возвращаем созданный пост с кодом 201
   return res.status(201).json(newComment);
 });
+=======
+  
+  // Создаем новый пост
+  const newComment = await CreateCommentForPost.createComment(content, {
+    userId:"", 
+    userlogin:"312"
+  }, createdAt);
+
+  // Возвращаем созданный пост с кодом 201
+  return res.status(201).json(newComment);
+
+});  
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { CreateComments, collection, collection1, collection4, collectionPostsType } from './db';
+=======
+import { GetPostComment, collection, collection1, collection4, collectionPostsType } from './db';
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad
 import { ObjectId } from 'mongodb';
 
 
@@ -144,8 +148,23 @@ export const updateIDPost = {
 };
 
 
+<<<<<<< HEAD
 export const CreateCommentsRepository = {
   async CreateComment(content: string, rest: any): Promise<CreateComments | undefined> {
+=======
+
+export const CreateCommentForPost = {
+  async getComment(): Promise<GetPostComment[]> {
+    const foundComment = await collection4.find({}).toArray();
+    const Comments = foundComment.map((Comment) => {
+      const { _id, ...rest } = Comment;
+      return rest;
+    });
+    return Comments;
+  },
+
+  async createComment(content: string, commentatorInfo: {userId: string, userlogin: string}, createdAt: string): Promise<GetPostComment | undefined> {
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad
     if (!content.trim()) {
       return undefined;
     }
@@ -154,14 +173,33 @@ export const CreateCommentsRepository = {
     const result = await collection4.insertOne({
       id: objectId,
       content,
+<<<<<<< HEAD
       commentatorInfo: rest,
       createdAt: createdAt1,
+=======
+      commentatorInfo: {
+        userId: "341",
+        userLogin: "123"
+      },
+      createdAt: createdAt1,
+      _id: objectId
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad
     });
     return {
       id: result.insertedId,
       content,
+<<<<<<< HEAD
       commentatorInfo: rest,
       createdAt: createdAt1,
     };
   },
+=======
+      commentatorInfo: {
+        userId: "341",
+        userLogin: "123"
+      },
+      createdAt: createdAt1
+    };
+  }
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad
 };

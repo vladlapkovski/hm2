@@ -1,5 +1,6 @@
 import { MongoClient, ObjectId } from "mongodb";
 import dotenv from 'dotenv';
+import { type } from "os";
 
 dotenv.config();
 
@@ -48,15 +49,32 @@ export type GetUserType = {
   createdAt: string;
 }
 
+<<<<<<< HEAD
 export type CreateComments = {
+=======
+export type CreateCommentsType = {
+  [key: string]: any;
+  content: string;
+}
+
+
+export type GetPostComment = {
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad
   [key: string]: any;
   id: ObjectId;
   content: string;
   commentatorInfo: {
+<<<<<<< HEAD
     userId: string;
     userLogin: string;
   };
   createdAt: string
+=======
+    userId: string,
+    userLogin: string
+  };
+  createdAt: string;
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad
 }
 
 const URL = process.env.MONGO_URL;
@@ -74,7 +92,11 @@ export const collection2 = client.db().collection<collectionAuthType>("Auth");
 
 export const collection3 = client.db().collection<GetUserType>("Users");
 
+<<<<<<< HEAD
 export const collection4 = client.db().collection<CreateComments>("Comments");
+=======
+export const collection4 = client.db().collection<GetPostComment>("Comments");
+>>>>>>> a4ac42c455f65d4e514ba2a30da6ab6ae2afbdad
 
 export const runDb = async () => {
   try {
