@@ -48,6 +48,17 @@ export type GetUserType = {
   createdAt: string;
 }
 
+export type CreateComments = {
+  [key: string]: any;
+  id: ObjectId;
+  content: string;
+  commentatorInfo: {
+    userId: string;
+    userLogin: string;
+  };
+  createdAt: string
+}
+
 const URL = process.env.MONGO_URL;
 console.log("url:", URL);
 if (!URL) {
@@ -62,6 +73,8 @@ export const collection1 = client.db().collection<collectionPostsType>("Postsoci
 export const collection2 = client.db().collection<collectionAuthType>("Auth");
 
 export const collection3 = client.db().collection<GetUserType>("Users");
+
+export const collection4 = client.db().collection<CreateComments>("Comments");
 
 export const runDb = async () => {
   try {

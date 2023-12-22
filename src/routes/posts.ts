@@ -1,7 +1,9 @@
 import express, {Request, Response, Router} from "express"
-import { socialRepository, updateIDPost } from "../social-repository-posts";
-import { collection, collectionPostsType, collection1 } from "../db";
+import { CreateCommentsRepository, socialRepository, updateIDPost } from "../social-repository-posts";
+import { collection, collectionPostsType, collection1, CreateComments, collection3 } from "../db";
 import { Collection, ObjectId } from 'mongodb';
+import { jwtService } from "../aplication/jwt-service";
+import { log } from "console";
 
 
 
@@ -53,7 +55,6 @@ postsRouter.get('/:id', async (req: Request, res: Response) => {
 
   if (post) {
     const { _id, ...rest } = post;
-    res.status(200).send(rest); 
   } else {
     res.sendStatus(404);
   }
@@ -221,3 +222,44 @@ postsRouter.put('/:id', async (req: Request, res: Response) => {
 
 
 
+postsRouter.post('/id/comments', async (req: Request, res: Response) => {
+  const { content } = req.body as CreateComments;
+
+  if (!req.headers.authorization) {
+    res.sendStatus(401);
+    return;
+  }
+
+  const token = req.headers.authorization.split(" ")[1];
+  const JWTtoken = await jwtService.getUserIdByToken(token);
+  const authUser = await collection3.findOne({ _id: JWTtoken as ObjectId });
+
+  if (!authUser) {
+    return res.status(404).json({ message: 'User not found' });
+  } 
+  
+  const { _id, createdAt, password, email, ...rest } = authUser;
+  
+
+  // Проверяем, что все обязательные поля заполнены
+  const errorsMessages = [];
+
+  if (!content || content?.trim()?.length == 0 || content?.length > 300 || content?.length < 20) {
+    errorsMessages.push({
+      message: 'Invalid content',
+      field: 'title'
+    });
+  }
+
+  if (errorsMessages.length > 0) {
+    return res.status(400).json({
+      errorsMessages
+    });
+  }
+
+  // Создаем новый пост
+  const newComment = await CreateCommentsRepository.CreateComment(content, rest);
+
+  // Возвращаем созданный пост с кодом 201
+  return res.status(201).json(newComment);
+});

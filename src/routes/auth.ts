@@ -7,6 +7,7 @@ import { ObjectId } from 'mongodb';
 import { updateIDBlog } from "../social-repository-blogs"
 import { socialRepositoryForAuth } from "../social-repository-auth";
 import { jwtService } from "../aplication/jwt-service";
+import { socialRepositoryForUsers } from "../social-repository-users";
 
 
 authRoutes.post('/login', async (req: Request, res: Response) => {
@@ -49,12 +50,19 @@ authRoutes.post('/login', async (req: Request, res: Response) => {
 
 
 
-authRoutes.get('/:id', async (req: Request, res: Response) => {
-    const id = new ObjectId(req.params.id);
+authRoutes.get('/:me', async (req: Request, res: Response) => {
+    const me = req.params.me;
     
+    if(!req.headers.authorization) {
+        res.sendStatus(401)
+        return
+    }
 
+    const token = req.headers.authorization.split(" ")[1]
 
-    const authUser = await collection3.findOne({ $or: [{ _id: id }, { id }] });
+    const JWTtoken = await jwtService.getUserIdByToken(token)   
+
+    const authUser = await collection3.findOne({ _id: JWTtoken as ObjectId });
   
     if (authUser) {
       const { _id, createdAt, password, ...rest } = authUser;
@@ -62,4 +70,18 @@ authRoutes.get('/:id', async (req: Request, res: Response) => {
     } else {
       res.sendStatus(404);
     }
+  });
+
+
+
+  authRoutes.get('/hello/123/123', async (req: Request, res: Response) => {
+    const id = new ObjectId(req.params.id);
+    
+
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTVmOTY5Y2JjZWFiZDRjZDk5NGQ4NjYiLCJpYXQiOjE3MDI5ODQxODcsImV4cCI6MTcwMjk4Nzc4N30.H6vUrOYpiwZY7-N52MYUVdCdH6OGO6a4owixfuD0vrk"
+
+    const JWTtoken = await jwtService.getUserIdByToken(token)
+  
+    res.status(200).send(JWTtoken)
+
   });
